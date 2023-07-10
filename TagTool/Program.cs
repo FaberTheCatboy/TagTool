@@ -36,7 +36,7 @@ namespace TagTool.Commands
                 Console.WriteLine($"Universal Tag Editor - A TagTool fork created by FaberTheCatgirl. [{Assembly.GetExecutingAssembly().GetName().Version}]");
                 Console.WriteLine();
                 Console.WriteLine("Please report any bugs and/or feature requests:");
-                Console.WriteLine("https://github.com/FaberTheCatgirl/TagTool/TagTool/issues");
+                Console.WriteLine("https://github.com/FaberTheCatgirl/Universal-Tag-Editor/issues");
             }
 
             start:
