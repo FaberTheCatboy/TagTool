@@ -149,5 +149,10 @@ namespace TagTool.Cache.ModPackages
                 resource.ChangeLocation(ResourceLocation.Mods);
             }
         }
+
+        public override object GetBitmapTextureInteropResource(object value) //compile hack, I'm not particularly proud of this one - Faber
+        {
+            throw new NotImplementedException();
+        }
     }
 }

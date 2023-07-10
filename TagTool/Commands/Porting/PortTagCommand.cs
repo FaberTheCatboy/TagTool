@@ -2009,17 +2009,18 @@ namespace TagTool.Commands.Porting
             {
                 case CacheVersion.Halo2Vista:
                 case CacheVersion.Halo2Xbox:
-                    if (flags.Halo2.ToString().Contains("Unknown"))
-                    {
-                        new TagToolWarning($"Disabling unknown phantom type flags ({flags.Halo2.ToString()})");
-                        Console.WriteLine($"         in tag \"{tagName}.physics_model\"");
-
-                        foreach (var flag in Enum.GetValues(typeof(PhysicsModel.PhantomTypeFlags.Halo2Bits)))
-                            if (flag.ToString().StartsWith("Unknown") && flags.Halo2.HasFlag((PhysicsModel.PhantomTypeFlags.Halo2Bits)flag))
-                                flags.Halo2 &= ~(PhysicsModel.PhantomTypeFlags.Halo2Bits)flag;
-                    }
-                    if (!Enum.TryParse(flags.Halo2.ToString(), out flags.Halo3ODST))
-                        throw new FormatException(BlamCache.Version.ToString());
+                    // Commenting out as it causes compile errors - Faber
+                    //if (flags.Halo2.ToString().Contains("Unknown"))
+                    //{
+                    //    new TagToolWarning($"Disabling unknown phantom type flags ({flags.Halo2.ToString()})");
+                    //    Console.WriteLine($"         in tag \"{tagName}.physics_model\"");
+                    //
+                    //    foreach (var flag in Enum.GetValues(typeof(PhysicsModel.PhantomTypeFlags.Halo2Bits)))
+                    //        if (flag.ToString().StartsWith("Unknown") && flags.Halo2.HasFlag((PhysicsModel.PhantomTypeFlags.Halo2Bits)flag))
+                    //            flags.Halo2 &= ~(PhysicsModel.PhantomTypeFlags.Halo2Bits)flag;
+                    //}
+                    //if (!Enum.TryParse(flags.Halo2.ToString(), out flags.Halo3ODST))
+                    //    throw new FormatException(BlamCache.Version.ToString());
                     break;
 
                 case CacheVersion.Halo3Retail:
