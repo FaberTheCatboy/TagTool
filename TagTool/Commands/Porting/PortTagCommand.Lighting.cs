@@ -478,4 +478,3 @@ namespace TagTool.Commands.Porting
         }
     }
 }
-

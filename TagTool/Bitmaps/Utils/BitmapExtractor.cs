@@ -58,11 +58,6 @@ namespace TagTool.Bitmaps
             }
         }
 
-        public static object ExtractBitmapToDDSArray(GameCache cache, Bitmap bitmapDefinition, int v)
-        {
-            throw new NotImplementedException();
-        }
-
         public static BaseBitmap ExtractBitmap(GameCache cache, Bitmap bitmap, int imageIndex, string tagName, bool forDDS = true)
         {
             if (cache is GameCacheHaloOnlineBase)
