@@ -134,6 +134,12 @@ namespace TagTool.Scripting.Compiler
             if (!(node is ScriptSymbol symbol))
                 throw new FormatException(node.ToString());
 
+            if (!Enum.TryParse(symbol.Value, true, out result.Halo3Alpha))
+                result.Halo3Alpha = HsType.Halo3AlphaValue.Invalid;
+
+            if (!Enum.TryParse(symbol.Value, true, out result.Halo3Beta))
+                result.Halo3Beta = HsType.Halo3BetaValue.Invalid;
+
             if (!Enum.TryParse(symbol.Value, true, out result.Halo3Retail))
                 result.Halo3Retail = HsType.Halo3RetailValue.Invalid;
 
@@ -142,6 +148,15 @@ namespace TagTool.Scripting.Compiler
 
             if (!Enum.TryParse(symbol.Value, true, out result.HaloOnline))
                 result.HaloOnline = HsType.HaloOnlineValue.Invalid;
+
+            if (!Enum.TryParse(symbol.Value, true, out result.HaloReach11883))
+                result.HaloReach11883 = HsType.HaloReach11883Value.Invalid;
+
+            if (!Enum.TryParse(symbol.Value, true, out result.HaloReachBeta))
+                result.HaloReachBeta = HsType.HaloReachBetaValue.Invalid;
+
+            if (!Enum.TryParse(symbol.Value, true, out result.HaloReach))
+                result.HaloReach = HsType.HaloReachValue.Invalid;
 
             return result;
         }
@@ -256,9 +271,14 @@ namespace TagTool.Scripting.Compiler
             if (scriptReturnType.HaloOnline == HsType.HaloOnlineValue.Invalid)
             {
                 var result = new HsType();
+                result.Halo3Alpha = HsType.Halo3AlphaValue.Void;
+                result.Halo3Beta = HsType.Halo3BetaValue.Void;
                 result.Halo3Retail = HsType.Halo3RetailValue.Void;
                 result.Halo3ODST = HsType.Halo3ODSTValue.Void;
                 result.HaloOnline = HsType.HaloOnlineValue.Void;
+                result.HaloReach11883 = HsType.HaloReach11883Value.Void;
+                result.HaloReachBeta = HsType.HaloReachBetaValue.Void;
+                result.HaloReach = HsType.HaloReachValue.Void;
                 scriptReturnType = result;
                 skipReturnType = true;
             }
@@ -439,9 +459,14 @@ namespace TagTool.Scripting.Compiler
             if (scriptReturnType.HaloOnline == HsType.HaloOnlineValue.Invalid)
             {
                 var result = new HsType();
+                result.Halo3Alpha = HsType.Halo3AlphaValue.Void;
+                result.Halo3Beta = HsType.Halo3BetaValue.Void;
                 result.Halo3Retail = HsType.Halo3RetailValue.Void;
                 result.Halo3ODST = HsType.Halo3ODSTValue.Void;
                 result.HaloOnline = HsType.HaloOnlineValue.Void;
+                result.HaloReach11883 = HsType.HaloReach11883Value.Void;
+                result.HaloReachBeta = HsType.HaloReachBetaValue.Void;
+                result.HaloReach = HsType.HaloReachValue.Void;
                 scriptReturnType = result;
                 skipReturnType = true;
             }
@@ -1123,11 +1148,23 @@ namespace TagTool.Scripting.Compiler
                 LineNumber = line.HasValue ? line.Value : (short)-1
             };
 
+            if (!Enum.TryParse(valueType.ToString(), out expression.ValueType.Halo3Alpha))
+                expression.ValueType.Halo3Alpha = HsType.Halo3AlphaValue.Invalid;
+
+            if (!Enum.TryParse(valueType.ToString(), out expression.ValueType.Halo3Beta))
+                expression.ValueType.Halo3Beta = HsType.Halo3BetaValue.Invalid;
+
             if (!Enum.TryParse(valueType.ToString(), out expression.ValueType.Halo3Retail))
                 expression.ValueType.Halo3Retail = HsType.Halo3RetailValue.Invalid;
 
             if (!Enum.TryParse(valueType.ToString(), out expression.ValueType.Halo3ODST))
                 expression.ValueType.Halo3ODST = HsType.Halo3ODSTValue.Invalid;
+
+            if (!Enum.TryParse(valueType.ToString(), out expression.ValueType.HaloReach11883))
+                expression.ValueType.HaloReach11883 = HsType.HaloReach11883Value.Invalid;
+
+            if (!Enum.TryParse(valueType.ToString(), out expression.ValueType.HaloReachBeta))
+                expression.ValueType.HaloReachBeta = HsType.HaloReachBetaValue.Invalid;
 
             ScriptExpressions.Add(expression);
 
