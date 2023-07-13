@@ -3,7 +3,7 @@ using TagTool.Common;
 namespace TagTool.Cache
 {
     /// <summary>
-    /// StringID resolver for Halo 3 Beta.
+    /// StringID resolver for Halo 3 Pimps at Sea Build.
     /// </summary>
     public class StringIdResolverHalo3Alpha : StringIdResolver
     {
