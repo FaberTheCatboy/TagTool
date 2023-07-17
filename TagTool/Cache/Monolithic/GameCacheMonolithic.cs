@@ -51,6 +51,11 @@ namespace TagTool.Cache.Monolithic
                     version = CacheVersion.HaloReach11883;
                     platform = CachePlatform.Original;
                     break;
+                // 21225.13.01.14.1906.main
+                case "b4b9a0a1-2f47-4bdf-9e9a-2b1d7d7e8b4a": // AI Generated - Might not be correct. Placeholder until I can get the proper hash. - Faber
+                    version = CacheVersion.Halo4Tag21225;
+                    platform = CachePlatform.Original;
+                    break;
                 default:
                     throw new Exception("Unable to detect monolothic cache version");
             }

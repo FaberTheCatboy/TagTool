@@ -53,17 +53,49 @@ namespace TagTool.Cache
         {
             switch (buildName)
             {
+                case "01.05.22.0268":
+                case "01.07.30.0452":
+                case "01.08.15.1749":
                 case "01.09.25.2247":
+                    version = CacheVersion.HaloBeta;
+                    cachePlatform = CachePlatform.Original;
+                    break;
+                case "01.01.14.2342": // Halo 1 Xbox PAL
+                case "01.03.14.0009": // Halo 1 Xbox Japan
+                case "01.12.09.0135": // Halo 1 Xbox China
                 case "01.10.12.2276":
                     version = CacheVersion.HaloXbox;
                     cachePlatform = CachePlatform.Original;
                     break;
+                case "01.00.00.0576": // Halo 1 PC Trial
                 case "01.00.00.0564":
+                case "01.00.10.0621": // Halo 1 PC v10
                     version = CacheVersion.HaloPC;
                     cachePlatform = CachePlatform.Original;
                     break;
                 case "01.00.00.0609":
                     version = CacheVersion.HaloCustomEdition;
+                    cachePlatform = CachePlatform.Original;
+                    break;
+                // case "":
+                //     version = CacheVersion.HaloOS;
+                //     cachePlatform = CachePlatform.Original;
+                //     break;
+                case "01.12.07.0132":
+                    version = CacheVersion.Shadowrun;
+                    cachePlatform = CachePlatform.Original;
+                    break;
+                case "400":
+                case "425": // Stubbs Xbox Demo
+                    version = CacheVersion.StubbsXbox;
+                    cachePlatform = CachePlatform.Original;
+                    break;
+                case "Invader 0.44.0.r3320":
+                    version = CacheVersion.Invader;
+                    cachePlatform = CachePlatform.Original;
+                    break;
+                case "02.01.07.4998":
+                    version = CacheVersion.Halo2Alpha;
                     cachePlatform = CachePlatform.Original;
                     break;
                 case "02.06.28.07902":
@@ -74,16 +106,15 @@ namespace TagTool.Cache
                     version = CacheVersion.Halo2Xbox;
                     cachePlatform = CachePlatform.Original;
                     break;
+                case "11028.07.03.23.1927.main": // Halo Vista Review Build
                 case "11081.07.04.30.0934.main":
-                case "11091.07.05.11.1104.main": // This is another version of the Vista Release of Halo 2, Added this to allow for detection of this version and extraction and porting of the tags.
-                    version = CacheVersion.Halo2Vista;
-                    cachePlatform = CachePlatform.Original;
-                    break;
+                case "11091.07.05.11.1104.main":
                 case "11122.07.08.24.1808.main":
                     version = CacheVersion.Halo2Vista;
                     cachePlatform = CachePlatform.Original;
                     break;
-                case "06481.06.11.17.1330.alpha_relea": // The Fabled Holy Grail, Pimps at Sea
+                case "05241.06.09.21.1534.first_playt": // First Playtest 
+                case "06481.06.11.17.1330.alpha_relea":
                     version = CacheVersion.Halo3Alpha;
                     cachePlatform = CachePlatform.Original;
                     break;
@@ -174,6 +205,10 @@ namespace TagTool.Cache
                     version = CacheVersion.HaloOnline700123;
                     cachePlatform = CachePlatform.Original;
                     break;
+                case "08516.10.02.19.1607.omaha_alpha":
+                    version = CacheVersion.HaloReachAlpha;
+                    cachePlatform = CachePlatform.Original;
+                    break;
                 case "09449.10.03.25.1545.omaha_beta": // This is the Halo Reach Pre-Beta Build. This was used to internally Test the game before the Beta was released.
                 case "09730.10.04.09.1309.omaha_delta": // This is the Halo Reach Beta Build. This was used to publically Test the game before the it was released.
                     version = CacheVersion.HaloReachBeta; // This is the Added Version Detection for the Halo Reach Beta Build, I have had to manually map out Tag Offsets for this build as they are not present in the Halo Reach Retail Build. This is due to the fact that the Halo Reach Beta Build is a heavily modified version of the Halo 3 Engine and requires some special handling.
@@ -233,6 +268,12 @@ namespace TagTool.Cache
                 case "Sep 10 2021 06:54:23": // MCC Update 3
                 case "Feb  3 2022 19:02:31": // MCC Update 4
                 case "Aug  8 2022 17:28:57": // MCC Update 5
+                case "Oct 17 2022 21:26:14": // MCC Update 6
+                case "Dec  6 2022 11:23:50": // MCC Mod Tools Release
+                case "Dec  6 2022 11:26:37": // MCC Mod Tools Release (Tool_Fast)
+                case "Apr  1 2023 17:35:22": // MCC Update 7
+                case "Jun 27 2023 08:46:47": // MCC Mod Tools Update 1
+                case "Jun 27 2023 08:47:24": // MCC Mod Tools Update 1 (Tool_Fast)
                     version = CacheVersion.Halo4;
                     cachePlatform = CachePlatform.MCC; // I have added a complete MCC Version History for the Cache Detection System, this is the MCC Version Detection for Halo 4.
                     break;
@@ -247,15 +288,40 @@ namespace TagTool.Cache
                 case "Sep 23 2021 02:46:19": // MCC Update 7
                 case "Feb 14 2022 19:18:28": // MCC Update 8
                 case "Jun 13 2022 13:44:24": // MCC Update 9
+                case "Oct 14 2022 21:11:35": // MCC Update 10
+                case "Dec  6 2022 11:13:38": // MCC Mod Tools Release
+                case "Dec  6 2022 11:13:46": // MCC Mod Tools Release (Tool_Fast)
+                case "Jun 13 2023 20:21:18": // MCC Update 11
+                case "Jun 27 2023 08:47:43": // MCC Mod Tools Update 1
+                case "Jun 27 2023 08:47:52": // MCC Mod Tools Update 1 (Tool_Fast)
                     version = CacheVersion.Halo2AMP; // This is the Added Version Detection for the Halo2AMP Build. not much is known of about this Build but it was confirmed as being a heavily modified Halo 4 Multiplayer Build.
                     cachePlatform = CachePlatform.MCC;
                     break;
                 case "May 29 2019 00:44:52": // MCC Internal Test Build
-                case "Jun 24 2019 00:36:03": // MCC Insider Build 1
-                case "Jul 30 2019 14:17:16": // MCC Insider Build 2
+                case "Jun 24 2019 00:36:03": // MCC Flight 1
+                case "Jul 30 2019 14:17:16": // MCC Flight 2
                 case "Oct 24 2019 15:56:32": // MCC Day One Build
                 case "Jan 30 2020 16:55:25": // MCC Update 1
                 case "Mar 24 2020 12:10:36": // MCC Update 2
+                case "Jun  5 2020 10:40:14": // MCC Update 3
+                case "Oct 15 2020 18:23:50": // MCC Update 4
+                case "Nov 24 2020 18:32:37": // MCC Update 5
+                case "Feb 17 2021 21:07:38": // MCC Flight 3
+                case "Mar  4 2021 13:14:28": // MCC Update 6
+                case "May 26 2021 10:02:45": // MCC Update 7
+                case "Aug 11 2021 15:50:30": // MCC Flight 4
+                case "Sep 13 2021 09:49:52": // MCC Update 8
+                case "Sep 17 2021 13:25:40": // MCC Update 9
+                case "Jan 13 2022 00:54:50": // MCC Update 10
+                case "Aug  5 2022 20:35:02": // MCC Update 11
+                case "Aug 31 2022 11:53:49": // MCC Mod Tools Release
+                case "Aug 31 2022 11:53:19": // MCC Mod Tools Release (Tool_Fast)
+                case "Oct 12 2022 01:55:01": // MCC Update 12
+                case "Nov 16 2022 21:11:25": // MCC Mod Tools Update 1
+                case "Nov 16 2022 21:13:04": // MCC Mod Tools Update 1 (Tool_Fast)
+                case "Jun 21 2023 15:35:31": // MCC Update 13
+                case "Jun 27 2023 08:55:51": // MCC Mod Tools Update 2
+                case "Jun 27 2023 08:55:19": // MCC Mod Tools Update 2 (Tool_Fast)
                     version = CacheVersion.HaloReach; // I have added a complete MCC Version History for the Cache Detection System, this is the MCC Version Detection for Halo Reach.
                     cachePlatform = CachePlatform.MCC;
                     break;
@@ -289,6 +355,11 @@ namespace TagTool.Cache
                 case "Jul 21 2022 21:15:27": // MCC Update 11
                 case "Aug 21 2022 17:23:29": // MCC Mod Tools Update 5
                 case "Aug 21 2022 17:24:39": // MCC Mod Tools Update 5 (Tool_Fast)
+                case "Oct 11 2022 04:34:53": // MCC Update 12
+                case "Nov 16 2022 21:16:57": // MCC Mod Tools Update 6
+                case "Nov 16 2022 21:18:10": // MCC Mod Tools Update 6 (Tool_Fast)
+                case "May 22 2023 20:10:02": // MCC Update 13 
+                case "Jun 27 2023 08:39:36": // MCC Mod Tools Update 7 (Tool and Tool_Fast are the same in this update)
                     version = CacheVersion.Halo3Retail; // I have added a complete MCC Version History for the Cache Detection System, this is the MCC Version Detection for Halo 3.
                     cachePlatform = CachePlatform.MCC;
                     break;
@@ -310,6 +381,12 @@ namespace TagTool.Cache
                 case "Jul 22 2022 05:55:30": // MCC Update 6
                 case "Aug 21 2022 17:29:59": // MCC Mod Tools Update 3
                 case "Aug 21 2022 17:30:28": // MCC Mod Tools Update 3 (Tool Fast Enabled Build)
+                case "Oct 24 2022 03:07:19": // MCC Update 7
+                case "Nov 16 2022 20:57:46": // MCC Mod Tools Update 4
+                case "Nov 16 2022 20:59:16": // MCC Mod Tools Update 4 (Tool Fast Enabled Build)
+                case "May 16 2023 11:44:41": // MCC Update 8
+                case "Jun 27 2023 08:39:51": // MCC Mod Tools Update 5
+                case "Jun 27 2023 08:39:50": // MCC Mod Tools Update 5 (Tool Fast Enabled Build)
                     version = CacheVersion.Halo3ODST; // I have added a complete MCC Version History for the Cache Detection System, this is the MCC Version Detection for Halo 3 ODST. Which isn't present in the current dev branch of TagTool.
                     cachePlatform = CachePlatform.MCC;
                     break;
@@ -342,6 +419,8 @@ namespace TagTool.Cache
             {
                 switch (version)
                 {
+                    case CacheVersion.HaloBeta:
+                        return "01.09.25.2247";
                     case CacheVersion.HaloXbox:
                         return "01.10.12.2276";
                     case CacheVersion.HaloPC:
@@ -350,12 +429,27 @@ namespace TagTool.Cache
                         return "01.00.00.0609";
                     case CacheVersion.Halo1A:
                         return "01.00.01.0563";
+                    //case CacheVersion.HaloOS:
+                    //    return "";
+                    //
+                    case CacheVersion.Shadowrun:
+                        return "01.12.07.0132";
+                    case CacheVersion.StubbsXbox:
+                        return "400";
+                    case CacheVersion.Invader:
+                        return "Invader 0.44.0.r3320";
+                    case CacheVersion.Halo2Alpha:
+                        return "02.01.07.4998";
                     case CacheVersion.Halo2Beta:
                         return "02.06.28.07902";
                     case CacheVersion.Halo2Xbox:
                         return "02.09.27.09809";
                     case CacheVersion.Halo2Vista:
                         return "11081.07.04.30.0934.main";
+                    case CacheVersion.Halo3Alpha:
+                        return "06481.06.11.17.1330.alpha_relea";
+                    case CacheVersion.Halo3Beta:
+                        return "09699.07.05.01.1534.delta";
                     case CacheVersion.Halo3Retail:
                         return "11855.07.08.20.2317.halo3_ship";
                     case CacheVersion.Halo3ODST:
@@ -394,6 +488,8 @@ namespace TagTool.Cache
                         return "11.1.604673 cert_ms29 Live";
                     case CacheVersion.HaloOnline700123:
                         return "12.1.700123 cert_ms30_oct19";
+                    case CacheVersion.HaloReachAlpha:
+                        return "08516.10.02.19.1607.omaha_alpha";
                     case CacheVersion.HaloReachBeta:
                         return "09730.10.04.09.1309.omaha_delta";
                     case CacheVersion.HaloReach:
@@ -408,6 +504,8 @@ namespace TagTool.Cache
                         return "15119.12.05.31.0400.e3m60";
                     case CacheVersion.Halo4PreRelease:
                         return "19057.12.08.19.0400.main";
+                    case CacheVersion.Halo4Tag21225:
+                        return "21225.13.01.14.1906.main";
                     case CacheVersion.Halo4:
                         return "20810.12.09.22.1647.main";
                     default:
@@ -442,13 +540,20 @@ namespace TagTool.Cache
                 case CacheVersion.Halo4Beta:
                 case CacheVersion.Halo4E3:
                 case CacheVersion.Halo4PreRelease:
+                case CacheVersion.Halo4Tag21225:
                 case CacheVersion.Halo2AMP:
                     return false;
 
+                case CacheVersion.HaloBeta:
                 case CacheVersion.HaloXbox:
                 case CacheVersion.HaloPC:
                 case CacheVersion.HaloCustomEdition:
                 case CacheVersion.Halo1A:
+                //case CacheVersion.HaloOS:
+                case CacheVersion.Shadowrun:
+                case CacheVersion.StubbsXbox:
+                case CacheVersion.Invader:
+                case CacheVersion.Halo2Alpha:
                 case CacheVersion.Halo2Beta:
 				case CacheVersion.Halo2Xbox:
 				case CacheVersion.Halo2Vista:
@@ -591,6 +696,7 @@ namespace TagTool.Cache
             switch (version)
             {
                 case CacheVersion.HaloReach11883:
+                case CacheVersion.Halo4Tag21225:
                     return CacheBuildType.TagsBuild;
             }
 
@@ -635,12 +741,18 @@ namespace TagTool.Cache
         {
             switch (version)
             {
+                case CacheVersion.HaloBeta:
                 case CacheVersion.HaloXbox:
                 case CacheVersion.HaloPC:
                 case CacheVersion.HaloCustomEdition:
                 case CacheVersion.Halo1A:
+                //case CacheVersion.HaloOS:
+                case CacheVersion.Shadowrun:
+                case CacheVersion.StubbsXbox:
+                case CacheVersion.Invader:
                     return CacheGeneration.First;
 
+                case CacheVersion.Halo2Alpha:
                 case CacheVersion.Halo2Vista:
                 case CacheVersion.Halo2Xbox:
                 case CacheVersion.Halo2Beta:
@@ -649,6 +761,7 @@ namespace TagTool.Cache
                 case CacheVersion.Halo3Beta:
                 case CacheVersion.Halo3Retail:
                 case CacheVersion.Halo3ODST:
+                case CacheVersion.HaloReachAlpha:
                 case CacheVersion.HaloReachBeta:
                 case CacheVersion.HaloReach:
                 case CacheVersion.HaloReach11883:
@@ -677,6 +790,9 @@ namespace TagTool.Cache
                 case CacheVersion.Halo4Beta:
                 case CacheVersion.Halo4:
                 case CacheVersion.Halo2AMP:
+                case CacheVersion.Halo4E3:
+                case CacheVersion.Halo4PreRelease:
+                case CacheVersion.Halo4Tag21225:
                     return CacheGeneration.Fourth;
 
                 default:
@@ -701,15 +817,22 @@ namespace TagTool.Cache
         {
             switch (version)
             {
+                case CacheVersion.HaloBeta:
                 case CacheVersion.HaloXbox:
                 case CacheVersion.HaloPC:
                 case CacheVersion.HaloCustomEdition:
                 case CacheVersion.Halo1A:
+                //case CacheVersion.HaloOS:
+                case CacheVersion.Shadowrun:
+                case CacheVersion.StubbsXbox:
+                case CacheVersion.Invader:
                     return GameTitle.HaloCE;
+                case CacheVersion.Halo2Alpha:
                 case CacheVersion.Halo2Beta:
                 case CacheVersion.Halo2Xbox:
                 case CacheVersion.Halo2Vista:
                     return GameTitle.Halo2;
+                case CacheVersion.Halo3Alpha:
                 case CacheVersion.Halo3Beta:
                 case CacheVersion.Halo3Retail:
                     return GameTitle.Halo3;
@@ -733,6 +856,8 @@ namespace TagTool.Cache
                 case CacheVersion.HaloOnline604673:
                 case CacheVersion.HaloOnline700123:
                     return GameTitle.HaloOnline;
+                case CacheVersion.HaloReachAlpha:
+                case CacheVersion.HaloReachBeta:
                 case CacheVersion.HaloReachDemo:
                 case CacheVersion.HaloReach:
                 case CacheVersion.HaloReach11883:
@@ -743,6 +868,8 @@ namespace TagTool.Cache
                 case CacheVersion.Halo4Beta:
                 case CacheVersion.Halo4E3:
                 case CacheVersion.Halo4:
+                case CacheVersion.Halo4PreRelease:
+                case CacheVersion.Halo4Tag21225:
                     return GameTitle.Halo4;
                 default:
                     return GameTitle.Unknown;
@@ -780,13 +907,19 @@ namespace TagTool.Cache
         /// </summary>
         private static readonly long[] VersionTimestamps =
         {
+            -1, // Halo Beta
             -1, // Halo Xbox
             -1, // Halo PC
             -1, // Halo Custom Edition
             -1, // Halo 1A
+            -1, // Shadowrun
+            -1, // StubbsXbox
+            -1, // Invader
+            -1, // Halo2Alpha
             -1, // Halo2Beta
             -1, // Halo2Xbox
             -1, // Halo2Vista
+            -1, // Halo3Alpha
             -1, // Halo3Beta
             -1, // Halo3Retail
             -1, // Halo3ODST
@@ -807,6 +940,7 @@ namespace TagTool.Cache
             130881889330693956, // HaloOnline571627
             130893802351772672, // HaloOnline604673
             130930071628935939, // HaloOnline700123
+            -1, // HaloReachAlpha
             -1, // HaloReachBeta
             -1, // HaloReachDemo
             -1, // HaloReach
@@ -816,7 +950,8 @@ namespace TagTool.Cache
             -1, // Halo4E3
             -1, // Halo4PreRelease
             -1, // Halo 4
-            -1 // Halo2AMP
+            -1, // Halo2AMP
+            -1, // Halo4Tag21225
 
         };
     }
@@ -824,10 +959,15 @@ namespace TagTool.Cache
     public enum CacheVersion : int
     {
         Unknown = -1,
+        HaloBeta,
         HaloXbox,
         HaloPC,
         HaloCustomEdition,
         Halo1A,
+        Shadowrun,
+        StubbsXbox,
+        Invader,
+        Halo2Alpha,
         Halo2Beta,
         Halo2Xbox,
         Halo2Vista,
@@ -852,6 +992,7 @@ namespace TagTool.Cache
         HaloOnline571627,
         HaloOnline604673,
         HaloOnline700123,
+        HaloReachAlpha,
         HaloReachBeta,
         HaloReachDemo,
         HaloReach,
@@ -861,6 +1002,7 @@ namespace TagTool.Cache
         Halo4Beta,
         Halo4E3,
         Halo4PreRelease,
+        Halo4Tag21225,
         Halo2AMP
     }
 
