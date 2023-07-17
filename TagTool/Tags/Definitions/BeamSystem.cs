@@ -7,15 +7,15 @@ using TagTool.Tags.Definitions.Common;
 
 namespace TagTool.Tags.Definitions
 {
-    [TagStructure(Name = "beam_system", Tag = "beam", Size = 0xC, MaxVersion = CacheVersion.Halo3ODST)]
+    [TagStructure(Name = "beam_system", Tag = "beam", Size = 0xC, MinVersion = CacheVersion.Halo3ODST, MaxVersion = CacheVersion.HaloReach)] //This appears to be shared between odst and reach, Halo 3 is unknown but probably the same, need to check later -Faber
     [TagStructure(Name = "beam_system", Tag = "beam", Size = 0x18, MinVersion = CacheVersion.HaloOnlineED, MaxVersion = CacheVersion.HaloOnline700123)]
-    [TagStructure(Name = "beam_system", Tag = "beam", Size = 0xC, MinVersion = CacheVersion.HaloReach)]
+
     public class BeamSystem : TagStructure
 	{
         public List<BeamDefinitionBlock> Beams;
 
         [TagField(Flags = Padding, Length = 12, MinVersion = CacheVersion.HaloOnlineED, MaxVersion = CacheVersion.HaloOnline700123)]
-        public byte[] Unused1; // can prob yeet this
+        public byte[] Unused1; // can prob yeet this // Who the hell wrote the previous comment? gonna have to check the git blame later - Faber
 
         [TagStructure(Size = 0x208, MaxVersion = CacheVersion.HaloOnline700123)]
         [TagStructure(Size = 0x238, MinVersion = CacheVersion.HaloReach)]
