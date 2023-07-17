@@ -52,7 +52,7 @@ namespace TagTool.Cache.Monolithic
                     platform = CachePlatform.Original;
                     break;
                 // 21225.13.01.14.1906.main
-                case "b4b9a0a1-2f47-4bdf-9e9a-2b1d7d7e8b4a": // AI Generated - Might not be correct. Placeholder until I can get the proper hash. - Faber
+                case "0e1faa8c-7f66-40aa-9027-276e168754b4": // This hash cost blood sweat and tears - Faber
                     version = CacheVersion.Halo4Tag21225;
                     platform = CachePlatform.Original;
                     break;
