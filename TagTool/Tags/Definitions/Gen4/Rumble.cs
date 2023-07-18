@@ -22,7 +22,7 @@ namespace TagTool.Tags.Definitions.Gen4
             public class RumbleFrequencyDefinitionStruct : TagStructure
             {
                 public float Duration; // seconds
-                public MappingFunction DirtyWhore;
+                public MappingFunction DirtyWhore; //who wrote this? - Faber
                 
                 [TagStructure(Size = 0x14)]
                 public class MappingFunction : TagStructure
