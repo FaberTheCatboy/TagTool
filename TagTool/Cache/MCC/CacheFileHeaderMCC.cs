@@ -117,7 +117,8 @@ namespace TagTool.Cache.MCC
             Halo3ODST,
             HaloReach,
             Halo4,
-            Halo2AMP
+            Halo2AMP,
+            Halo2
         }
     }
 }

@@ -17,7 +17,7 @@ namespace TagTool.Shaders.ShaderGenerator
 {
     public class RenderMethodDefinitionGenerator
     {
-        private static readonly string[] AutoMacroShaderTypes = new string[] { "beam", "contrail", "decal", "light_volume", "particle", "water" };
+        private static readonly string[] AutoMacroShaderTypes = new string[] { "beam", "contrail", "decal", "light_volume", "particle", "water", "wetness" };
 
         public static RenderMethodDefinition GenerateRenderMethodDefinition(GameCache cache, Stream cacheStream, IShaderGenerator generator, string shaderType, out GlobalPixelShader glps, out GlobalVertexShader glvs)
         {
@@ -240,6 +240,9 @@ namespace TagTool.Shaders.ShaderGenerator
                     break;
                 case "water":
                     globalRmopName = @"shaders\water_options\water_global";
+                    break;
+                case "wetness":
+                    globalRmopName = @"shaders\wetness_options\wetness_ripples"; //Reach
                     break;
             }
 

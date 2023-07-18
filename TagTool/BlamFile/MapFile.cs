@@ -197,6 +197,9 @@ namespace TagTool.BlamFile
                 var engineVersion = (CacheFileHeaderMCC.HaloEngineVersion)reader.ReadSByte();
                 switch(engineVersion)
                 {
+                    case CacheFileHeaderMCC.HaloEngineVersion.Halo2:
+                        cacheVersion = CacheVersion.Halo2Vista; 
+                        break;
                     case CacheFileHeaderMCC.HaloEngineVersion.Halo3:
                         cacheVersion = CacheVersion.Halo3Retail;
                         break;

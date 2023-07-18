@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HaloShaderGenerator.Shader;
+using HaloShaderGenerator.Shared;
+using System;
 using System.Collections.Generic;
 
 namespace TagTool.Shaders.ShaderMatching
@@ -17,7 +19,9 @@ namespace TagTool.Shaders.ShaderMatching
             HalogramOptionTypes.overlay,
             HalogramOptionTypes.edge_fade,
             HalogramOptionTypes.self_illumination,
-            HalogramOptionTypes.albedo
+            HalogramOptionTypes.albedo,
+            HalogramOptionTypes.distortion,
+            HalogramOptionTypes.soft_fade
         };
 
         private static List<AlbedoOptions> AlbedoOrder = new List<AlbedoOptions> {
@@ -83,6 +87,18 @@ namespace TagTool.Shaders.ShaderMatching
             EdgeFadeOptions.simple
         };
 
+        private static List<DistortionOptions> DistortionOrder = new List<DistortionOptions>
+        {
+            DistortionOptions.Off,
+            DistortionOptions.On
+        };
+
+        private static List<SoftFadeOptions> SoftFadeOrder = new List<SoftFadeOptions>
+        {
+            SoftFadeOptions.none,
+            SoftFadeOptions.simple
+        };
+
         // H3 count
         public int GetTypeCount() => 7;
 
@@ -98,6 +114,8 @@ namespace TagTool.Shaders.ShaderMatching
                 case HalogramOptionTypes.warp:                  return 3;
                 case HalogramOptionTypes.overlay:               return 5;
                 case HalogramOptionTypes.edge_fade:             return 2;
+                case HalogramOptionTypes.distortion:            return 7;
+                case HalogramOptionTypes.soft_fade:             return 8;
                 default:                                        return 0;
             }
         }
@@ -118,6 +136,9 @@ namespace TagTool.Shaders.ShaderMatching
                 case HalogramOptionTypes.warp:                  return WarpOrder.IndexOf((WarpOptions)optionIndex);
                 case HalogramOptionTypes.overlay:               return OverlayOrder.IndexOf((OverlayOptions)optionIndex);
                 case HalogramOptionTypes.edge_fade:             return EdgeFadeOrder.IndexOf((EdgeFadeOptions)optionIndex);
+                case HalogramOptionTypes.distortion:            return DistortionOrder.IndexOf((DistortionOptions)optionIndex);
+                case HalogramOptionTypes.soft_fade:             return SoftFadeOrder.IndexOf((SoftFadeOptions)optionIndex);
+
                 default:                                        return 0;
             }
         }
@@ -135,6 +156,8 @@ namespace TagTool.Shaders.ShaderMatching
             result += $"Warp: {(WarpOptions)options[4]} \n";
             result += $"Overlay: {(OverlayOptions)options[5]} \n";
             result += $"Edge Fade: {(EdgeFadeOptions)options[6]} \n";
+            result += $"Distortion: {(DistortionOptions)options[7]} \n";
+            result += $"Soft Fade: {(SoftFadeOptions)options[8]} \n";
 
             return result;
         }
@@ -152,7 +175,9 @@ namespace TagTool.Shaders.ShaderMatching
             misc = 3,
             warp = 4,
             overlay = 5,
-            edge_fade = 6
+            edge_fade = 6,
+            distortion = 7,
+            soft_fade = 8
         }
 
         private enum AlbedoOptions
@@ -222,6 +247,12 @@ namespace TagTool.Shaders.ShaderMatching
         {
             none,
             simple
+        }
+
+        private enum SoftFadeOptions
+        {
+            none,
+            simple //Guessing this one till I can check - Faber
         }
     }
 }
