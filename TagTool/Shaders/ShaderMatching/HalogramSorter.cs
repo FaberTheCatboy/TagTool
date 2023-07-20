@@ -249,6 +249,12 @@ namespace TagTool.Shaders.ShaderMatching
             simple
         }
 
+        private enum DistortionOptions
+        {
+            Off,
+            On
+        }
+
         private enum SoftFadeOptions
         {
             none,

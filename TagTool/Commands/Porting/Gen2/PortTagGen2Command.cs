@@ -11,7 +11,7 @@ using TagTool.IO;
 using TagTool.Tags;
 using TagTool.Tags.Definitions.Gen2;
 using TagTool.BlamFile;
-using TagTool.Commands.Porting;
+//using TagTool.Commands.Porting;
 
 namespace TagTool.Commands.Porting.Gen2
 {
