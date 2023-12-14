@@ -1003,7 +1003,8 @@ namespace TagTool.Cache
         Halo4E3,
         Halo4PreRelease,
         Halo4Tag21225,
-        Halo2AMP
+        Halo2AMP,
+        Halo4MCC
     }
 
     public enum CacheGeneration : int

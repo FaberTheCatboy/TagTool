@@ -133,6 +133,7 @@ namespace TagTool.Cache.Gen3
                         TagsKey = "";
                         break;
                     case CacheVersion.HaloReach11883:
+                    case CacheVersion.HaloReachAlpha:
                     case CacheVersion.HaloReachBeta:
                     case CacheVersion.HaloReachDemo:
                     case CacheVersion.HaloReach:

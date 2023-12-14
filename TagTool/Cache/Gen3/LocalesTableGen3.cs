@@ -29,11 +29,14 @@ namespace TagTool.Cache.Gen3
                 case CacheVersion.Halo3ODST:
                     localesKey = "";
                     break;
+                case CacheVersion.HaloReachAlpha:
+                    localesKey = "BungieHaloReach!";
+                    break;
                 case CacheVersion.HaloReachBeta:
-                    localesKey = ""; //I don't know if bungie encrypted the locales in the beta, I'll have to check - Faber
+                    localesKey = "BungieHaloReach!";
                     break;
                 case CacheVersion.HaloReach11883:
-                    localesKey = ""; // Same as above - Faber
+                    localesKey = "BungieHaloReach!"; 
                     break;
                 case CacheVersion.HaloReach when baseMapFile.CachePlatform == CachePlatform.Original:
                     localesKey = "BungieHaloReach!";

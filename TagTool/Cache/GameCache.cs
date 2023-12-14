@@ -78,6 +78,7 @@ namespace TagTool.Cache
                 case CacheVersion.Halo3Beta:
                 case CacheVersion.Halo3Retail:
                 case CacheVersion.Halo3ODST:
+                case CacheVersion.HaloReachAlpha:
                 case CacheVersion.HaloReachBeta:
                 case CacheVersion.HaloReach:
                 case CacheVersion.HaloReachDemo:

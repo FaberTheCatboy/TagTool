@@ -121,10 +121,11 @@ namespace TagTool.Cache
                 case CacheVersion.Halo3Beta:
                 case CacheVersion.Halo3Retail:
                 case CacheVersion.Halo3ODST:
-                case CacheVersion.HaloReachBeta: //I don't know if bungie encrypted the NetworkKey in the beta, I'll have to check - Faber
-                case CacheVersion.HaloReach11883: // Same as above - Faber
                     NetworkKey = "";
                     break;
+                case CacheVersion.HaloReachAlpha:
+                case CacheVersion.HaloReachBeta:
+                case CacheVersion.HaloReach11883:
                 case CacheVersion.HaloReach:
                     NetworkKey = "SneakerNetReigns";
                     break;
@@ -160,6 +161,26 @@ namespace TagTool.Cache
                     if (Version != CacheVersion.HaloReach)
                         game = Version.ToString();
                     
+                    FMODSoundCacheDirectory = new DirectoryInfo(Path.Combine(root, "common\\Halo The Master Chief Collection", game, "fmod\\pc"));
+                }
+                else if (CacheFile.Directory.FullName.Contains("steamapps\\workshop\\content"))
+                {
+                    string root = CacheFile.Directory.FullName.Split(new string[] { "workshop" }, StringSplitOptions.None)[0];
+                    string game = "halo4";
+
+                    if (Version != CacheVersion.Halo4)
+                        game = Version.ToString();
+
+                    FMODSoundCacheDirectory = new DirectoryInfo(Path.Combine(root, "common\\Halo The Master Chief Collection", game, "fmod\\pc"));
+                }
+                else if (CacheFile.Directory.FullName.Contains("steamapps\\workshop\\content"))
+                {
+                    string root = CacheFile.Directory.FullName.Split(new string[] { "workshop" }, StringSplitOptions.None)[0];
+                    string game = "groundhog";
+
+                    if (Version != CacheVersion.Halo2AMP)
+                        game = Version.ToString();
+
                     FMODSoundCacheDirectory = new DirectoryInfo(Path.Combine(root, "common\\Halo The Master Chief Collection", game, "fmod\\pc"));
                 }
                 else
