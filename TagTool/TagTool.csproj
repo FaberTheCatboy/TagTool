@@ -311,6 +311,8 @@
     <Compile Include="Cache\Gen2\GameCacheGen2.cs" />
     <Compile Include="Cache\Gen2\TagCacheGen2.cs" />
     <Compile Include="Cache\Gen3\StringIdResolverHalo3Alpha.cs" />
+    <Compile Include="Cache\Gen3\StringIdResolverHaloReachAlpha.cs" />
+    <Compile Include="Cache\Gen3\StringIdResolverHaloReachBeta.cs" />
     <Compile Include="Cache\Gen4\CachedTagGen4.cs" />
     <Compile Include="Cache\Gen4\GameCacheGen4.cs" />
     <Compile Include="Cache\Gen4\LocalesTableGen4.cs" />
