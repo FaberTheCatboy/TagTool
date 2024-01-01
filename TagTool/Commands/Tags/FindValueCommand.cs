@@ -104,7 +104,7 @@ namespace TagTool.Commands.Tags
                             }
                             catch
                             {
-                                new TagToolWarning($"{outputPrefix}{path} invalid string id found! {path}");
+                                new TagToolError(CommandError.CustomError, $"{outputPrefix}{path} invalid string id found! {path}");
                             }
                         }
                         break;

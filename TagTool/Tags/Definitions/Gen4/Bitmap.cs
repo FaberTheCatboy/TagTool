@@ -7,7 +7,7 @@ using static TagTool.Tags.TagFieldFlags;
 
 namespace TagTool.Tags.Definitions.Gen4
 {
-    [TagStructure(Name = "bitmap", Tag = "bitm", Size = 0xCC, MinVersion = CacheVersion.Halo4, MaxVersion = CacheVersion.Halo2AMP)]
+    [TagStructure(Name = "bitmap", Tag = "bitm", Size = 0xCC)]
     public class Bitmap : TagStructure
     {
         // choose how you are using this bitmap

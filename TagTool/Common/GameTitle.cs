@@ -16,8 +16,7 @@ namespace TagTool.Common
         Halo3ODST,
         HaloOnline,
         HaloReach,
-        Halo4,
-        Halo2AMP
+        Halo4
     }
 }
 

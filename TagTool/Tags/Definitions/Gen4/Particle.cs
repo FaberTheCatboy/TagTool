@@ -7,7 +7,7 @@ using static TagTool.Tags.TagFieldFlags;
 
 namespace TagTool.Tags.Definitions.Gen4
 {
-    [TagStructure(Name = "particle", Tag = "prt3", Size = 0x238, MinVersion = CacheVersion.Halo4, MaxVersion = CacheVersion.Halo2AMP)]
+    [TagStructure(Name = "particle", Tag = "prt3", Size = 0x238)]
     public class Particle : TagStructure
     {
         public ParticleMainFlags MainFlags;

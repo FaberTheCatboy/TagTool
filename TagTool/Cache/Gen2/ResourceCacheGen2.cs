@@ -193,9 +193,5 @@ namespace TagTool.Cache.Gen2
             throw new NotImplementedException();
         }
 
-        public override object GetBitmapTextureInteropResource(object value)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

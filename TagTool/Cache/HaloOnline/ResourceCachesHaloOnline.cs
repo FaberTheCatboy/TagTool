@@ -85,10 +85,5 @@ namespace TagTool.Cache.HaloOnline
             }
             return cache;
         }
-
-        public override object GetBitmapTextureInteropResource(object value)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

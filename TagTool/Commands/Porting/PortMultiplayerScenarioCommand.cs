@@ -483,9 +483,6 @@ namespace TagTool.Commands.Porting
 
                 // finalize the scenario
                 destCache.Serialize(destStream, scnrTag, scnr);
-
-                porttag.WaitForPendingSoundConversion();
-                porttag.ProcessDeferredActions();
             }
     
             foreach (var pair in resourceStreams)

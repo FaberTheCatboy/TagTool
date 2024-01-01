@@ -82,7 +82,7 @@ namespace TagTool.Shaders.ShaderMatching
             return optionParameters;
         }
 
-        public Dictionary<StringId, RenderMethodOption.ParameterBlock> GetOptionBlocks(List<byte> options, RenderMethodDefinition rmdf) //List<byte> options for 0.6, List<byte> rmdf.Method got mainmenucache
+        public Dictionary<StringId, RenderMethodOption.ParameterBlock> GetOptionBlocks(List<byte> options, RenderMethodDefinition rmdf)
         {
             Dictionary<StringId, RenderMethodOption.ParameterBlock> optionBlocks = new Dictionary<StringId, RenderMethodOption.ParameterBlock>();
 
@@ -132,14 +132,14 @@ namespace TagTool.Shaders.ShaderMatching
                 return null;
             }
 
-            //if (!UpdatedRmdf.Contains(sourceRmt2Desc.Type)) // will update or generate rmdf as needed
-            //{
-            //    if (!ShaderGenerator.RenderMethodDefinitionGenerator.UpdateRenderMethodDefinition(BaseCache, BaseCacheStream, sourceRmt2Desc.Type))
-            //        Console.WriteLine($"WARNING: rmdf for shader type \"{sourceRmt2Desc.Type}\" could not be updated or generated.");
-            //    else
-            //        Console.WriteLine($"Rmdf for shader type \"{sourceRmt2Desc.Type}\" updated or generated.");
-            //    UpdatedRmdf.Add(sourceRmt2Desc.Type);
-            //}
+            if (!UpdatedRmdf.Contains(sourceRmt2Desc.Type)) // will update or generate rmdf as needed
+            {
+                if (!ShaderGenerator.RenderMethodDefinitionGenerator.UpdateRenderMethodDefinition(BaseCache, BaseCacheStream, sourceRmt2Desc.Type))
+                    Console.WriteLine($"WARNING: rmdf for shader type \"{sourceRmt2Desc.Type}\" could not be updated or generated.");
+                else
+                    Console.WriteLine($"Rmdf for shader type \"{sourceRmt2Desc.Type}\" updated or generated.");
+                UpdatedRmdf.Add(sourceRmt2Desc.Type);
+            }
 
             // rebuild options to match base cache
             sourceRmt2Desc = RebuildRmt2Options(sourceRmt2Desc, BaseCacheStream, PortingCacheStream);
@@ -151,7 +151,6 @@ namespace TagTool.Shaders.ShaderMatching
             Dictionary<CachedTag, long> ShaderTemplateValues = new Dictionary<CachedTag, long>();
             ParticleSorter particleTemplateSorter = new ParticleSorter();
             BeamSorter beamTemplateSorter = new BeamSorter();
-            //CustomSorter customTemplateSorter = new CustomSorter(); //This shit doesn't work... Why?
             ContrailSorter contrailTemplateSorter = new ContrailSorter();
             LightVolumeSorter lightvolumeTemplateSorter = new LightVolumeSorter();
             ShaderSorter shaderTemplateSorter = new ShaderSorter();
@@ -161,7 +160,6 @@ namespace TagTool.Shaders.ShaderMatching
             DecalSorter decalTemplateSorter = new DecalSorter();
             ScreenSorter screenTemplateSorter = new ScreenSorter();
             WaterSorter waterTemplateSorter = new WaterSorter();
-            //WetnessSorter wetnessTemplateSorter = new WetnessSorter();
 
             foreach (var rmt2Tag in BaseCache.TagCache.NonNull().Where(tag => tag.IsInGroup("rmt2")))
             {
@@ -184,11 +182,8 @@ namespace TagTool.Shaders.ShaderMatching
                 // match the options from the rmt2 tag names
                 int commonOptions = 0;
                 int score = 0;
-                for (int i = 0; i < sourceRmt2Desc.Options.Length; i++)
+                for (int i = 0; i < sourceRmt2Desc.Options.Length && i < destRmt2Desc.Options.Length; i++)
                 {
-                    if (i >= destRmt2Desc.Options.Length)
-                        continue;
-
                     if (sourceRmt2Desc.Options[i] == destRmt2Desc.Options[i])
                     {
                         score += 1 + weights[i];
@@ -220,9 +215,6 @@ namespace TagTool.Shaders.ShaderMatching
                     case "beam":
                         ShaderTemplateValues.Add(rmt2Tag, Sorter.GetValue(beamTemplateSorter, Sorter.GetTemplateOptions(rmt2Tag.Name)));
                         break;
-                    //case "custom":
-                    //    ShaderTemplateValues.Add(rmt2Tag, Sorter.GetValue(customTemplateSorter, Sorter.GetTemplateOptions(rmt2Tag.Name))); //More Broken Code :c
-                    //    break;
                     case "contrail":
                         ShaderTemplateValues.Add(rmt2Tag, Sorter.GetValue(contrailTemplateSorter, Sorter.GetTemplateOptions(rmt2Tag.Name)));
                         break;
@@ -253,9 +245,6 @@ namespace TagTool.Shaders.ShaderMatching
                     case "water":
                         ShaderTemplateValues.Add(rmt2Tag, Sorter.GetValue(waterTemplateSorter, Sorter.GetTemplateOptions(rmt2Tag.Name)));
                         break;
-                    //case "wetness":
-                    //    ShaderTemplateValues.Add(rmt2Tag, Sorter.GetValue(wetnessTemplateSorter, Sorter.GetTemplateOptions(rmt2Tag.Name)));
-                    //    break;
                 }
             }
 
@@ -288,7 +277,7 @@ namespace TagTool.Shaders.ShaderMatching
             {
                 case "beam":            return GetBestTag(beamTemplateSorter, ShaderTemplateValues, srcRmt2Tagname, sourceRmt2Tag.Name);
                 case "black":           return null;
-                //case "custom":          return GetBestTag(customTemplateSorter, ShaderTemplateValues, srcRmt2Tagname, srcRmt2Tagname.Name); //Write Shader Code, they said it would be fun...
+                case "custom":          return null;
                 case "contrail":        return GetBestTag(contrailTemplateSorter, ShaderTemplateValues, srcRmt2Tagname, sourceRmt2Tag.Name);
                 case "decal":           return GetBestTag(decalTemplateSorter, ShaderTemplateValues, srcRmt2Tagname, sourceRmt2Tag.Name);
                 case "foliage":         return GetBestTag(foliageTemplateSorter, ShaderTemplateValues, srcRmt2Tagname, sourceRmt2Tag.Name);
@@ -299,7 +288,6 @@ namespace TagTool.Shaders.ShaderMatching
                 case "shader":          return GetBestTag(shaderTemplateSorter, ShaderTemplateValues, srcRmt2Tagname, sourceRmt2Tag.Name);
                 case "terrain":         return GetBestTag(terrainTemplateSorter, ShaderTemplateValues, srcRmt2Tagname, sourceRmt2Tag.Name);
                 case "water":           return GetBestTag(waterTemplateSorter, ShaderTemplateValues, srcRmt2Tagname, sourceRmt2Tag.Name);
-                //case "wetness":         return GetBestTag(wetnessTemplateSorter, ShaderTemplateValues, srcRmt2Tagname, sourceRmt2Tag.Name));
                 default:                return null;
             }
         }
@@ -308,32 +296,33 @@ namespace TagTool.Shaders.ShaderMatching
         {
             generatedRmt2 = null;
 
-            //var generator = rmt2Desc.GetGenerator(true);
-            //if (generator == null)
-            //    return false;
+            var generator = rmt2Desc.GetGenerator(true);
+            if (generator == null)
+                return false;
 
+            GlobalPixelShader glps;
+            GlobalVertexShader glvs;
             RenderMethodDefinition rmdf;
             CachedTag rmdfTag;
             if (!BaseCache.TagCache.TryGetTag($"shaders\\{rmt2Desc.Type}.rmdf", out rmdfTag))
             {
-                new TagToolError(CommandError.CustomMessage, $"No rmdf tag present for {rmt2Desc.Type}");
-                return false;
+                Console.WriteLine($"Generating rmdf for \"{rmt2Desc.Type}\"");
+                rmdf = ShaderGenerator.RenderMethodDefinitionGenerator.GenerateRenderMethodDefinition(BaseCache, BaseCacheStream, generator, rmt2Desc.Type, out glps, out glvs);
+                rmdfTag = BaseCache.TagCache.AllocateTag<RenderMethodDefinition>($"shaders\\{rmt2Desc.Type}");
+                BaseCache.Serialize(BaseCacheStream, rmdfTag, rmdf);
+                (BaseCache as GameCacheHaloOnlineBase).SaveTagNames();
 
-                //Console.WriteLine($"Generating rmdf for \"{rmt2Desc.Type}\"");
-                //rmdf = ShaderGenerator.RenderMethodDefinitionGenerator.GenerateRenderMethodDefinition(BaseCache, BaseCacheStream, generator, rmt2Desc.Type, out glps, out glvs);
-                //rmdfTag = BaseCache.TagCache.AllocateTag<RenderMethodDefinition>($"shaders\\{rmt2Desc.Type}");
-                //BaseCache.Serialize(BaseCacheStream, rmdfTag, rmdf);
-                //(BaseCache as GameCacheHaloOnlineBase).SaveTagNames();
-                //
-                //rmt2Desc = RebuildRmt2Options(rmt2Desc, BaseCacheStream, PortingCacheStream);
-                //tagName = $"shaders\\{rmt2Desc.Type}_templates\\_{string.Join("_", rmt2Desc.Options)}";
+                rmt2Desc = RebuildRmt2Options(rmt2Desc, BaseCacheStream, PortingCacheStream);
+                tagName = $"shaders\\{rmt2Desc.Type}_templates\\_{string.Join("_", rmt2Desc.Options)}";
             }
             else
             {
                 rmdf = BaseCache.Deserialize<RenderMethodDefinition>(BaseCacheStream, rmdfTag);
+                glps = BaseCache.Deserialize<GlobalPixelShader>(BaseCacheStream, rmdf.GlobalPixelShader);
+                glvs = BaseCache.Deserialize<GlobalVertexShader>(BaseCacheStream, rmdf.GlobalVertexShader);
             }
 
-            var rmt2 = ShaderGenerator.ShaderGeneratorNew.GenerateTemplateSafe(BaseCache, BaseCacheStream, rmdf, tagName, out PixelShader pixl, out VertexShader vtsh);
+            var rmt2 = ShaderGenerator.ShaderGenerator.GenerateRenderMethodTemplate(BaseCache, BaseCacheStream, rmdf, glps, glvs, generator, tagName, out PixelShader pixl, out VertexShader vtsh);
 
             generatedRmt2 = BaseCache.TagCache.AllocateTag<RenderMethodTemplate>(tagName);
 
@@ -427,10 +416,10 @@ namespace TagTool.Shaders.ShaderMatching
                             optionName = "always_calc_albedo";
                         if (methodName == "alpha_test" && optionName == "from_texture")
                             optionName = "simple";
-                        //if (PortingCache.Version == CacheVersion.Halo3ODST && methodName == "material_model" && optionName == "cook_torrance")
-                        //    optionName = "cook_torrance_odst";
-                        //if (methodName == "material_model" && optionName == "cook_torrance_rim_fresnel")
-                        //    optionName = "cook_torrance";
+                        if (PortingCache.Version == CacheVersion.Halo3ODST && methodName == "material_model" && optionName == "cook_torrance")
+                            optionName = "cook_torrance_odst";
+                        if (methodName == "material_model" && optionName == "cook_torrance_rim_fresnel")
+                            optionName = "cook_torrance";
                         if (PortingCache.Version == CacheVersion.HaloReach && methodName == "environment_mapping" && optionName == "dynamic")
                             optionName = "dynamic_reach";
 
@@ -637,7 +626,7 @@ namespace TagTool.Shaders.ShaderMatching
                         case "custom":          return new HaloShaderGenerator.Custom.CustomGenerator(Options, applyFixes);
                         case "decal":           return new HaloShaderGenerator.Decal.DecalGenerator(Options, applyFixes);
                         case "foliage":         return new HaloShaderGenerator.Foliage.FoliageGenerator(Options, applyFixes);
-                        //case "glass":           return new HaloShaderGenerator.Glass.GlassGenerator(Options, applyFixes); //todo: define glass
+                        //case "glass":           return new HaloShaderGenerator.Glass.GlassGenerator(Options, applyFixes);
                         case "halogram":        return new HaloShaderGenerator.Halogram.HalogramGenerator(Options, applyFixes);
                         case "light_volume":    return new HaloShaderGenerator.LightVolume.LightVolumeGenerator(Options, applyFixes);
                         case "particle":        return new HaloShaderGenerator.Particle.ParticleGenerator(Options, applyFixes);
@@ -645,7 +634,6 @@ namespace TagTool.Shaders.ShaderMatching
                         case "shader":          return new HaloShaderGenerator.Shader.ShaderGenerator(Options, applyFixes);
                         case "terrain":         return new HaloShaderGenerator.Terrain.TerrainGenerator(Options, applyFixes);
                         case "water":           return new HaloShaderGenerator.Water.WaterGenerator(Options, applyFixes);
-                        //case "wetness":         return new HaloShaderGenerator.Wetness.WetnessGenerator(Options, applyFixes); //Might work in ms30, testing needed
                         case "zonly":           return new HaloShaderGenerator.ZOnly.ZOnlyGenerator(Options, applyFixes);
                     }
 

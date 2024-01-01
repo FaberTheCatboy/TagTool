@@ -7,8 +7,6 @@ using static TagTool.Tags.TagFieldFlags;
 
 namespace TagTool.Tags.Definitions
 {
-    [TagStructure(Name = "biped", Tag = "bipd", Size = 0x43C, MaxVersion = CacheVersion.Halo3Alpha)]
-    [TagStructure(Name = "biped", Tag = "bipd", Size = 0x4D0, MaxVersion = CacheVersion.Halo3Beta)]
     [TagStructure(Name = "biped", Tag = "bipd", Size = 0x1D4, MaxVersion = CacheVersion.Halo3Retail)]
     [TagStructure(Name = "biped", Tag = "bipd", Size = 0x21C, MinVersion = CacheVersion.Halo3ODST, MaxVersion = CacheVersion.Halo3ODST)]
     [TagStructure(Name = "biped", Tag = "bipd", Size = 0x240, MinVersion = CacheVersion.HaloOnlineED, MaxVersion = CacheVersion.HaloOnline700123)]

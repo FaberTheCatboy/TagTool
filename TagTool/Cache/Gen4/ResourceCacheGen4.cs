@@ -457,10 +457,5 @@ namespace TagTool.Cache.Gen4
 
             return decompressed;
         }
-
-        public override object GetBitmapTextureInteropResource(object value)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -7,8 +7,7 @@ using static TagTool.Tags.TagFieldFlags;
 
 namespace TagTool.Tags.Definitions.Gen4
 {
-    [TagStructure(Name = "model", Tag = "hlmt", Size = 0x260, MaxVersion = CacheVersion.Halo4)]
-    [TagStructure(Name = "model", Tag = "hlmt", Size = 0x190, MaxVersion = CacheVersion.Halo2AMP)]
+    [TagStructure(Name = "model", Tag = "hlmt", Size = 0x260)]
     public class Model : TagStructure
     {
         [TagField(ValidTags = new [] { "mode" })]

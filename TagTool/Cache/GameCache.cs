@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -66,7 +66,6 @@ namespace TagTool.Cache
                 case CacheVersion.HaloXbox:
                 case CacheVersion.HaloPC:
                 case CacheVersion.HaloCustomEdition:
-                case CacheVersion.Halo1A:
                     return new GameCacheGen1(map, file);
 
                 case CacheVersion.Halo2Vista:
@@ -74,14 +73,10 @@ namespace TagTool.Cache
                 case CacheVersion.Halo2Beta:
                     return new GameCacheGen2(map, file);
 
-                case CacheVersion.Halo3Alpha:
                 case CacheVersion.Halo3Beta:
                 case CacheVersion.Halo3Retail:
                 case CacheVersion.Halo3ODST:
-                case CacheVersion.HaloReachAlpha:
-                case CacheVersion.HaloReachBeta:
                 case CacheVersion.HaloReach:
-                case CacheVersion.HaloReachDemo:
                     return new GameCacheGen3(map, file);
 
                 case CacheVersion.HaloOnlineED:
@@ -112,20 +107,13 @@ namespace TagTool.Cache
                         return new GameCacheHaloOnline(tagsFile.Directory);
                     }
 
-                case CacheVersion.Halo4Alpha:
                 case CacheVersion.Halo4:
-                case CacheVersion.Halo4Beta:
-                case CacheVersion.Halo4E3:
-                case CacheVersion.Halo4PreRelease:
-                case CacheVersion.Halo2AMP:
                     return new GameCacheGen4(map, file);
             }
 
             return null;
         }
 
-        public abstract bool TryGetTag(string text, out object tag);
-        public abstract bool TryParseGroupTag(string value, out object tag);
         public abstract void SaveStrings();
     }
 }

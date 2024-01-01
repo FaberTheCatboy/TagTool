@@ -12,13 +12,12 @@ using TagTool.Common;
 using TagTool.Shaders;
 using TagTool.Tags.Definitions;
 using static TagTool.Tags.Definitions.RenderMethodDefinition;
-using TagTool.Commands.Common;
 
 namespace TagTool.Shaders.ShaderGenerator
 {
     public class RenderMethodDefinitionGenerator
     {
-        private static readonly string[] AutoMacroShaderTypes = new string[] { "beam", "contrail", "decal", "light_volume", "particle", "water", "wetness" };
+        private static readonly string[] AutoMacroShaderTypes = new string[] { "beam", "contrail", "decal", "light_volume", "particle", "water" };
 
         public static RenderMethodDefinition GenerateRenderMethodDefinition(GameCache cache, Stream cacheStream, IShaderGenerator generator, string shaderType, out GlobalPixelShader glps, out GlobalVertexShader glvs)
         {
@@ -49,12 +48,10 @@ namespace TagTool.Shaders.ShaderGenerator
             
             if (!cache.TagCache.TryGetTag<RenderMethodDefinition>(rmdfName, out CachedTag rmdfTag)) // generate
             {
-                new TagToolError(CommandError.CustomMessage, $"No rmdf tag present for {shaderType}");
-                return false;
-                //rmdfTag = cache.TagCache.AllocateTag<RenderMethodDefinition>(rmdfName);
-                //var rmdf = GenerateRenderMethodDefinition(cache, stream, generator, shaderType, out _, out _);
-                //cache.Serialize(stream, rmdfTag, rmdf);
-                //(cache as GameCacheHaloOnlineBase).SaveTagNames();
+                rmdfTag = cache.TagCache.AllocateTag<RenderMethodDefinition>(rmdfName);
+                var rmdf = GenerateRenderMethodDefinition(cache, stream, generator, shaderType, out _, out _);
+                cache.Serialize(stream, rmdfTag, rmdf);
+                (cache as GameCacheHaloOnlineBase).SaveTagNames();
             }
             else // can update
             {
@@ -244,9 +241,6 @@ namespace TagTool.Shaders.ShaderGenerator
                 case "water":
                     globalRmopName = @"shaders\water_options\water_global";
                     break;
-                case "wetness":
-                    globalRmopName = @"shaders\wetness_options\wetness_ripples"; //Reach
-                    break;
             }
 
             if (!cache.TagCache.TryGetTag<RenderMethodOption>(globalRmopName, out CachedTag rmopTag))
@@ -339,7 +333,15 @@ namespace TagTool.Shaders.ShaderGenerator
             out CachedTag glpsTag, out CachedTag glvsTag, out GlobalPixelShader glps, out GlobalVertexShader glvs)
         {
             glps = ShaderGenerator.GenerateSharedPixelShader(cache, generator);
-            glvs = ShaderGenerator.GenerateSharedVertexShader(cache, generator);
+
+            if (shaderType != "beam" && shaderType != "contrail" && shaderType != "light_volume" && shaderType != "particle" && shaderType != "screen")
+            {
+                glvs = ShaderGenerator.GenerateSharedVertexShader(cache, generator);
+            }
+            else
+            {
+                glvs = new GlobalVertexShader { VertexTypes = new List<GlobalVertexShader.VertexTypeShaders>(), Shaders = new List<VertexShaderBlock>() };
+            }
 
             if (!cache.TagCache.TryGetTag<GlobalPixelShader>($"shaders\\{shaderType.ToLower()}_shared_pixel_shaders", out glpsTag))
                 glpsTag = cache.TagCache.AllocateTag<GlobalPixelShader>($"shaders\\{shaderType.ToLower()}_shared_pixel_shaders");

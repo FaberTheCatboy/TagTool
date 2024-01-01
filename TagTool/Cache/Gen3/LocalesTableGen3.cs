@@ -17,26 +17,11 @@ namespace TagTool.Cache.Gen3
             string localesKey = "";
             switch (baseMapFile.Version)
             {
-                case CacheVersion.Halo3Alpha:
-                    localesKey = "";
-                    break;
-                case CacheVersion.Halo3Beta:
-                    localesKey = "";
-                    break;
                 case CacheVersion.Halo3Retail:
                     localesKey = "";
                     break;
                 case CacheVersion.Halo3ODST:
                     localesKey = "";
-                    break;
-                case CacheVersion.HaloReachAlpha:
-                    localesKey = "BungieHaloReach!";
-                    break;
-                case CacheVersion.HaloReachBeta:
-                    localesKey = "BungieHaloReach!";
-                    break;
-                case CacheVersion.HaloReach11883:
-                    localesKey = "BungieHaloReach!"; 
                     break;
                 case CacheVersion.HaloReach when baseMapFile.CachePlatform == CachePlatform.Original:
                     localesKey = "BungieHaloReach!";

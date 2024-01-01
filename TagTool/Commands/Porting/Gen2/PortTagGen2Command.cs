@@ -11,7 +11,6 @@ using TagTool.IO;
 using TagTool.Tags;
 using TagTool.Tags.Definitions.Gen2;
 using TagTool.BlamFile;
-//using TagTool.Commands.Porting;
 
 namespace TagTool.Commands.Porting.Gen2
 {
@@ -192,7 +191,6 @@ namespace TagTool.Commands.Porting.Gen2
                     Shader oldshader = Gen2Cache.Deserialize<Shader>(gen2CacheStream, gen2Tag);
                     definition = ConvertShader(shader, oldshader, cacheStream);
                     break;
-                    //return Cache.TagCache.GetTag(@"shaders\invalid.shader");
                 case ScenarioStructureBsp sbsp:
                     definition = ConvertStructureBSP(sbsp);
                     break;

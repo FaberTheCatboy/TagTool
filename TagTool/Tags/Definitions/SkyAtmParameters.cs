@@ -6,7 +6,6 @@ using System;
 
 namespace TagTool.Tags.Definitions
 {
-    [TagStructure(Name = "sky_atm_parameters", Tag = "skya", Size = 0x7C, MaxVersion = CacheVersion.Halo3Alpha)]
     [TagStructure(Name = "sky_atm_parameters", Tag = "skya", Size = 0x4C, MinVersion = CacheVersion.Halo3Retail, MaxVersion = CacheVersion.HaloOnline454665)]
     [TagStructure(Name = "sky_atm_parameters", Tag = "skya", Size = 0x54, MinVersion = CacheVersion.HaloOnline498295, MaxVersion = CacheVersion.HaloOnline700123)]
     [TagStructure(Name = "sky_atm_parameters", Tag = "skya", Size = 0x44, MinVersion = CacheVersion.HaloReach)]

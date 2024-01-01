@@ -35,7 +35,6 @@ namespace TagTool.Cache.Resources
         public abstract TagResourceReference CreateBitmapInterleavedResource(BitmapTextureInterleavedInteropResource bitmapResourceDefinition);
         public abstract TagResourceReference CreateStructureBspResource(StructureBspTagResources sbspResource);
         public abstract TagResourceReference CreateStructureBspCacheFileResource(StructureBspCacheFileTagResources sbspCacheFileResource);
-        public abstract object GetBitmapTextureInteropResource(object value);
     }
 
 }

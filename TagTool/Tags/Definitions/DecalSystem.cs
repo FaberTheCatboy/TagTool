@@ -6,7 +6,6 @@ using TagTool.Cache;
 
 namespace TagTool.Tags.Definitions
 {
-    [TagStructure(Name = "decal_system", Tag = "decs", Size = 0x1C, MaxVersion = CacheVersion.Halo3Alpha)]
     [TagStructure(Name = "decal_system", Tag = "decs", Size = 0x24, MaxVersion = CacheVersion.HaloOnline700123)]
     [TagStructure(Name = "decal_system", Tag = "decs", Size = 0x3C, MinVersion = CacheVersion.HaloReach)]
     public class DecalSystem : TagStructure

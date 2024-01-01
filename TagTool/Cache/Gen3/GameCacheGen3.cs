@@ -117,15 +117,11 @@ namespace TagTool.Cache
             // unused but kept for future uses
             switch (Version)
             {
-                case CacheVersion.Halo3Alpha:
                 case CacheVersion.Halo3Beta:
                 case CacheVersion.Halo3Retail:
                 case CacheVersion.Halo3ODST:
                     NetworkKey = "";
                     break;
-                case CacheVersion.HaloReachAlpha:
-                case CacheVersion.HaloReachBeta:
-                case CacheVersion.HaloReach11883:
                 case CacheVersion.HaloReach:
                     NetworkKey = "SneakerNetReigns";
                     break;
@@ -139,46 +135,6 @@ namespace TagTool.Cache
                     string game = "halo3";
 
                     if (Version != CacheVersion.Halo3Retail)
-                        game = Version.ToString();
-
-                    FMODSoundCacheDirectory = new DirectoryInfo(Path.Combine(root, "common\\Halo The Master Chief Collection", game, "fmod\\pc"));
-                }
-                else if (CacheFile.Directory.FullName.Contains("steamapps\\workshop\\content"))
-                {
-                    string root = CacheFile.Directory.FullName.Split(new string[] { "workshop" }, StringSplitOptions.None)[0];
-                    string game = "halo3odst";
-
-                    if (Version != CacheVersion.Halo3ODST)
-                        game = Version.ToString();
-
-                    FMODSoundCacheDirectory = new DirectoryInfo(Path.Combine(root, "common\\Halo The Master Chief Collection", game, "fmod\\pc"));
-                }
-                else if (CacheFile.Directory.FullName.Contains("steamapps\\workshop\\content"))
-                {
-                    string root = CacheFile.Directory.FullName.Split(new string[] { "workshop" }, StringSplitOptions.None)[0];
-                    string game = "haloreach";
-
-                    if (Version != CacheVersion.HaloReach)
-                        game = Version.ToString();
-                    
-                    FMODSoundCacheDirectory = new DirectoryInfo(Path.Combine(root, "common\\Halo The Master Chief Collection", game, "fmod\\pc"));
-                }
-                else if (CacheFile.Directory.FullName.Contains("steamapps\\workshop\\content"))
-                {
-                    string root = CacheFile.Directory.FullName.Split(new string[] { "workshop" }, StringSplitOptions.None)[0];
-                    string game = "halo4";
-
-                    if (Version != CacheVersion.Halo4)
-                        game = Version.ToString();
-
-                    FMODSoundCacheDirectory = new DirectoryInfo(Path.Combine(root, "common\\Halo The Master Chief Collection", game, "fmod\\pc"));
-                }
-                else if (CacheFile.Directory.FullName.Contains("steamapps\\workshop\\content"))
-                {
-                    string root = CacheFile.Directory.FullName.Split(new string[] { "workshop" }, StringSplitOptions.None)[0];
-                    string game = "groundhog";
-
-                    if (Version != CacheVersion.Halo2AMP)
                         game = Version.ToString();
 
                     FMODSoundCacheDirectory = new DirectoryInfo(Path.Combine(root, "common\\Halo The Master Chief Collection", game, "fmod\\pc"));
@@ -262,16 +218,6 @@ namespace TagTool.Cache
             {
                 sectionTable.SectionAddressToOffsets[i] += shiftAmount;
             }
-        }
-
-        public override bool TryGetTag(string text, out object tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool TryParseGroupTag(string value, out object tag)
-        {
-            throw new NotImplementedException();
         }
     }
 }

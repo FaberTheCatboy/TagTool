@@ -6,7 +6,6 @@ using static TagTool.Tags.TagFieldFlags;
 
 namespace TagTool.Tags.Definitions
 {
-    [TagStructure(Name = "lens_flare", Tag = "lens", Size = 0x6C, MaxVersion = CacheVersion.Halo3Alpha)]
     [TagStructure(Name = "lens_flare", Tag = "lens", Size = 0x98, MaxVersion = CacheVersion.Halo3ODST, Platform = CachePlatform.Original)]
     [TagStructure(Name = "lens_flare", Tag = "lens", Size = 0x9C, MinVersion = CacheVersion.HaloOnlineED, Platform = CachePlatform.Original)]
     [TagStructure(Name = "lens_flare", Tag = "lens", Size = 0x9C, Version = CacheVersion.Halo3Retail, Platform = CachePlatform.MCC)]

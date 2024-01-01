@@ -31,14 +31,6 @@ namespace TagTool.Cache.Gen4
                     Resolver = new StringIdResolverHalo3ODST();
                     break;
 
-                case CacheVersion.HaloReachAlpha:
-                    Resolver = new StringIdResolverHaloReachAlpha();
-                    break;
-
-                case CacheVersion.HaloReachBeta:
-                    Resolver = new StringIdResolverHaloReachBeta();
-                    break;
-
                 case CacheVersion.HaloReach:
                     Resolver = new StringIdResolverHaloReach();
                     StringKey = "ILikeSafeStrings";
@@ -46,11 +38,6 @@ namespace TagTool.Cache.Gen4
 
                 case CacheVersion.Halo4:
                     Resolver = new StringIdResolverHalo4();
-                    StringKey = "ILikeSafeStrings";
-                    break;
-
-                case CacheVersion.Halo2AMP:
-                    Resolver = new StringIdResolverHalo2AMP();
                     StringKey = "ILikeSafeStrings";
                     break;
 
@@ -125,11 +112,6 @@ namespace TagTool.Cache.Gen4
          */
 
         public override StringId AddString(string newString)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override object GetString(object name)
         {
             throw new NotImplementedException();
         }

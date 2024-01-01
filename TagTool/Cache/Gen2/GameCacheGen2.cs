@@ -44,15 +44,14 @@ namespace TagTool.Cache
 
             switch (BaseMapFile.Header.GetCacheType())
             {
-                case CacheFileType.Solo:
-                    SharedCacheType = CacheFileType.SingleplayerShared;
+                case CacheFileType.Campaign:
+                    SharedCacheType = CacheFileType.SharedCampaign;
                     VistaSharedTagCacheName = "single_player_shared.map";
                     break;
                 case CacheFileType.Multiplayer:
-                    SharedCacheType = CacheFileType.MultiplayerShared;
-                    VistaSharedTagCacheName = "shared.map";
-                    break;
                 case CacheFileType.MainMenu:    // see if this is necessary
+                    SharedCacheType = CacheFileType.Shared;
+                    VistaSharedTagCacheName = "shared.map";
                     break;
             }
 
@@ -230,16 +229,6 @@ namespace TagTool.Cache
         public override void SaveStrings()
         {
             throw new NotImplementedException();
-        }
-
-        public override bool TryGetTag(string text, out object tag)
-        {
-            return VistaSharedTagCache.TryGetTag(text, out tag);
-        }
-
-        public override bool TryParseGroupTag(string value, out object tag)
-        {
-            return VistaSharedTagCache.TryParseGroupTag(value, out tag);
         }
 
         // Purpose: to opaquely manage the lifetime of the shared cache stream

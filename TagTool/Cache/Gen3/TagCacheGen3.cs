@@ -126,23 +126,13 @@ namespace TagTool.Cache.Gen3
             {
                 switch (Version)
                 {
-                    case CacheVersion.Halo3Alpha:
                     case CacheVersion.Halo3Beta:
                     case CacheVersion.Halo3Retail:
                     case CacheVersion.Halo3ODST:
                         TagsKey = "";
                         break;
-                    case CacheVersion.HaloReach11883:
-                    case CacheVersion.HaloReachAlpha:
-                    case CacheVersion.HaloReachBeta:
-                    case CacheVersion.HaloReachDemo:
                     case CacheVersion.HaloReach:
                     case CacheVersion.Halo4:
-                    case CacheVersion.Halo4Alpha:
-                    case CacheVersion.Halo4Beta:
-                    case CacheVersion.Halo4E3:
-                    case CacheVersion.Halo4PreRelease:
-                    case CacheVersion.Halo2AMP:
                         TagsKey = "LetsAllPlayNice!";
                         break;
                 }
@@ -156,22 +146,6 @@ namespace TagTool.Cache.Gen3
             uint tagNamesBufferOffset;
             ulong tagDataSectionOffset;
 
-            if (Version > CacheVersion.Halo3Alpha)
-            {
-                var sectionTable = gen3Header.SectionTable;
-                sectionOffset = sectionTable.GetSectionOffset(CacheFileSectionType.TagSection);
-
-                // means no tags
-                if (sectionTable.Sections[(int)CacheFileSectionType.TagSection].Size == 0)
-                    return;
-
-                tagNamesOffsetsTableOffset = sectionTable.GetOffset(CacheFileSectionType.StringSection, tagNamesHeader.TagNameIndicesOffset);
-                tagNamesBufferOffset = sectionTable.GetOffset(CacheFileSectionType.StringSection, tagNamesHeader.TagNamesBufferOffset);
-
-                tagDataSectionOffset = gen3Header.VirtualBaseAddress.Value - sectionOffset;
-            }
-            else
-            
             if (Version > CacheVersion.Halo3Beta)
             {
                 var sectionTable = gen3Header.SectionTable;

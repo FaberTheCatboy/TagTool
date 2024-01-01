@@ -117,9 +117,6 @@ namespace TagTool.Commands.Porting
 
                         ConvertTag(cacheStream, blamCacheStream, resourceStreams, blamTag);
                         Flags = oldFlags;
-
-                        if (FlagIsSet(PortingFlags.MPobject))
-                            TestForgePaletteCompatible(cacheStream, blamTag, argParameters);
                     }
 
                     WaitForPendingSoundConversion();
@@ -316,7 +313,7 @@ namespace TagTool.Commands.Porting
             return result;
         }
 
-        public void ProcessDeferredActions()
+        private void ProcessDeferredActions()
         {
             while(_deferredActions.TryTake(out Action action))
             {
@@ -629,6 +626,8 @@ namespace TagTool.Commands.Porting
                     return null;//CacheContext.TagCache.GetTag<GlobalVertexShader>(@"shaders\shader_shared_vertex_shaders");
 				case "glps":
                     return null;// CacheContext.TagCache.GetTag<GlobalPixelShader>(@"shaders\shader_shared_pixel_shaders");
+				case "rmgl":
+					return CacheContext.TagCache.GetTag<Shader>(@"levels\multi\s3d_avalanche\materials\s3d_avalanche_collision_material_55");
 				case "rmt2":
                     // match rmt2 with current ones available, else return null
                     return FindClosestRmt2(cacheStream, blamCacheStream, blamTag);
@@ -825,16 +824,34 @@ namespace TagTool.Commands.Porting
 						foreach (var screenEffect in sefc.ScreenEffects)
 							screenEffect.HiddenFlags = AreaScreenEffect.HiddenFlagBits.UpdateThread | AreaScreenEffect.HiddenFlagBits.RenderThread;
                     }
+                    if (sefc.ScreenEffects.Count > 0 && sefc.ScreenEffects[0].Lifetime == 1.0f && sefc.ScreenEffects[0].MaximumDistance == 1.0f)
+                    {
+                        sefc.ScreenEffects[0].Lifetime = 1E+19f;
+                        sefc.ScreenEffects[0].MaximumDistance = 1E+19f;
+                    }
                     foreach (var screenEffect in sefc.ScreenEffects)
                     {
                         //convert flags
                         if (BlamCache.Version == CacheVersion.Halo3Retail)
-                            Enum.TryParse(screenEffect.Flags_H3.ToString(), out screenEffect.Flags_ODST);
-                        else if (BlamCache.Version >= CacheVersion.HaloOnline106708 && BlamCache.Version <= CacheVersion.HaloOnline700123)
-                            Enum.TryParse(screenEffect.Flags.ToString(), out screenEffect.Flags_ODST);
+                            Enum.TryParse(screenEffect.Flags_H3.ToString(), out screenEffect.Flags);
+                        else if (BlamCache.Version == CacheVersion.Halo3ODST)
+                            Enum.TryParse(screenEffect.Flags_ODST.ToString(), out screenEffect.Flags);
 
-                        if (CacheContext.StringTable.GetString(screenEffect.InputVariable) == "saved_film_vision_mode_intensity")
-                            screenEffect.Flags_ODST |= AreaScreenEffect.ScreenEffectBlock.SefcFlagBits_ODST.DebugDisable; // prevents spawning and rendering
+                        if (screenEffect.InputVariable != null && screenEffect.InputVariable != StringId.Invalid)
+                        {
+                            //restore ODST stringid input variables using name field to store values
+                            screenEffect.Name = ConvertStringId(screenEffect.InputVariable);
+
+                            screenEffect.Flags |= AreaScreenEffect.ScreenEffectBlock.SefcFlagBits.UseNameAsStringIDInput;
+                            if (screenEffect.RangeVariable != null && screenEffect.RangeVariable != StringId.Invalid)
+                            {
+                                screenEffect.Flags |= AreaScreenEffect.ScreenEffectBlock.SefcFlagBits.InvertStringIDInput;
+                            }
+
+                            //fixup for vision mode saved film sefc always displaying
+                            if (BlamCache.StringTable.GetStringId("saved_film_vision_mode_intensity") == screenEffect.InputVariable)
+                                screenEffect.Name = CacheContext.StringTable.GetStringId("flashlight_intensity");
+                        }
                     }
                     
                     break;
@@ -879,12 +896,16 @@ namespace TagTool.Commands.Porting
                     }
                     break;
 
-                case CinematicScene cisc when BlamCache.Version == CacheVersion.Halo3ODST:
+                case CinematicScene cisc:
                     foreach (var shot in cisc.Shots)
                     {
                         foreach (var frame in shot.CameraFrames)
                         {
-                            frame.FocalLength *= 0.65535f; // fov change in ODST affected cisc too it seems
+                            frame.NearFocalPlaneDistance *= -1.0f;
+                            frame.FarFocalPlaneDistance *= -1.0f;
+
+                            if (BlamCache.Version == CacheVersion.Halo3ODST)
+                                frame.FocalLength *= 0.65535f; // fov change in ODST affected cisc too it seems
                         }
                     }
                     break;
@@ -1046,6 +1067,28 @@ namespace TagTool.Commands.Porting
                         default:
                             break;
                     };
+                    if (FlagIsSet(PortingFlags.MPobject) && blamDefinition is GameObject obj)
+                    {
+                        if (obj.MultiplayerObject.Count == 0)
+                        {
+                            obj.MultiplayerObject.Add(new GameObject.MultiplayerObjectBlock() { DefaultSpawnTime = 30, DefaultAbandonTime = 30 });
+                        }
+
+                        if (argParameters.Count() > 0)
+                        {
+                            int.TryParse(argParameters[0], out int paletteIndex);
+                            var objTagName = $"{edTag.Name}.{(edTag.Group as TagGroupGen3).Name}";
+
+                            var paletteItemName = edTag.Name.Split('.').First().Split('\\').Last();
+                            if (argParameters.Count() > 1)
+                                paletteItemName = argParameters[1].Replace('-', ' ');
+
+                            _deferredActions.Add(() =>
+                            {
+                                AddForgePaletteItem(cacheStream, objTagName, paletteIndex, paletteItemName);
+                            });
+                        }
+                    }
                     break;
 
 				case Globals matg:
@@ -1248,7 +1291,6 @@ namespace TagTool.Commands.Porting
                 case ShaderCustom rmcs:
                 case ShaderDecal rmd:
                 case ShaderHalogram rmhg:
-                case ShaderGlass rmgl:
                 case Shader rmsh:
                 case ShaderScreen rmss:
                 case ShaderWater rmw:
@@ -1295,74 +1337,16 @@ namespace TagTool.Commands.Porting
 			return edTag;
 		}
 
-        private void TestForgePaletteCompatible(Stream cacheStream, CachedTag blamTag, string[] argParameters)
-        {
-            if (!blamTag.IsInGroup("obje") || !CacheContext.TagCache.TryGetCachedTag(blamTag.ToString(), out CachedTag edTag))
-                return;
-
-            var definition = CacheContext.Deserialize(cacheStream, edTag);
-            if (definition is GameObject obj)
-            {
-                if (obj.MultiplayerObject.Count == 0)
-                {
-                    obj.MultiplayerObject.Add(new GameObject.MultiplayerObjectBlock() {
-                        DefaultSpawnTime = 30,
-                        DefaultAbandonTime = 30
-                    });
-                    CacheContext.Serialize(cacheStream, edTag, definition);
-                }
-
-                if (argParameters.Count() > 0)
-                {
-                    if (!int.TryParse(argParameters[0], out int paletteIndex) && argParameters[0] == "*")
-                        paletteIndex = -1;
-
-                    var objTagName = $"{edTag.Name}.{(edTag.Group as TagGroupGen3).Name}";
-
-                    var paletteItemName = edTag.Name.Split('.').First().Split('\\').Last();
-                    if (argParameters.Count() > 1)
-                        paletteItemName = argParameters[1].Replace('_', ' ');
-
-                    _deferredActions.Add(() =>
-                    {
-                        AddForgePaletteItem(cacheStream, objTagName, paletteIndex, paletteItemName);
-                    });
-                }
-            }
-        }
-
         private void AddForgePaletteItem(Stream cacheStream, string gameObjectName, int paletteCategory, string paletteItemName)
         {
             if (CacheContext.TagCache.TryGetCachedTag(@"multiplayer\forge_globals.forge_globals_definition", out CachedTag forge_globals))
                 if (CacheContext.TagCache.TryGetCachedTag(gameObjectName, out CachedTag objectTag))
                 {
                     var forg = CacheContext.Deserialize<ForgeGlobalsDefinition>(cacheStream, forge_globals);
-
-                    if (paletteCategory == -1)
-                        paletteCategory = (short)(forg.PaletteCategories.Count() - 1);
-
-                    var itemType = ForgeGlobalsDefinition.PaletteItemType.Prop;
-                    switch(objectTag.Group.ToString())
-                    {
-                        case "weapon":
-                            itemType = ForgeGlobalsDefinition.PaletteItemType.Weapon;
-                            break;
-                        case "equipment":
-                            itemType = ForgeGlobalsDefinition.PaletteItemType.Equipment;
-                            break;
-                        case "vehicle":
-                            itemType = ForgeGlobalsDefinition.PaletteItemType.Vehicle;
-                            break;
-                        case "effect_scenery":
-                        case "sound_scenery":
-                            itemType = ForgeGlobalsDefinition.PaletteItemType.Effects;
-                            break;
-                    }
-
                     forg.Palette.Add(new ForgeGlobalsDefinition.PaletteItem()
                     {
                         Name = paletteItemName,
-                        Type = itemType,
+                        Type = ForgeGlobalsDefinition.PaletteItemType.Prop,
                         CategoryIndex = (short)paletteCategory,
                         DescriptionIndex = -1,
                         MaxAllowed = 0,
@@ -1523,21 +1507,6 @@ namespace TagTool.Commands.Porting
 
 				case CachedTag tag:
 					{
-                        if (IgnoreBlamTagCommand.UserDefinedIgnoredBlamTagsIndicies.Contains(tag.Index))
-                        {
-                            //find equivalent in base cache otherwise use null
-                            foreach (var instance in CacheContext.TagCache.FindAllInGroup(tag.Group.Tag))
-                            {
-                                if (instance == null || instance.Name == null)
-                                    continue;
-
-                                if (instance.Name == tag.Name)
-                                    return instance;
-                            }
-
-                            return null;
-                        }
-
 						if (!FlagIsSet(PortingFlags.Recursive))
 						{
 							foreach (var instance in CacheContext.TagCache.FindAllInGroup(tag.Group.Tag))
@@ -1828,28 +1797,28 @@ namespace TagTool.Commands.Porting
 		{
             foreach (var tagFieldInfo in TagStructure.GetTagFieldEnumerable(data.GetType(), CacheContext.Version, CacheContext.Platform))
             {
-                var attributes = tagFieldInfo.FieldInfo.GetCustomAttributes(false).OfType<TagFieldAttribute>().ToList();
-                if (attributes.Count == 0 || attributes.Any(attr => CacheVersionDetection.TestAttribute(attr, BlamCache.Version, BlamCache.Platform)))
+                var attr = tagFieldInfo.Attribute;
+                if (!CacheVersionDetection.TestAttribute(attr, BlamCache.Version, BlamCache.Platform))
+                    continue;
+
+                // skip the field if no conversion is needed
+                if ((tagFieldInfo.FieldType.IsValueType && tagFieldInfo.FieldType != typeof(StringId)) || tagFieldInfo.FieldType == typeof(string))
                 {
-                    // skip the field if no conversion is needed
-                    if ((tagFieldInfo.FieldType.IsValueType && tagFieldInfo.FieldType != typeof(StringId)) || tagFieldInfo.FieldType == typeof(string))
-                    {
-                        if (!tagFieldInfo.Attribute.Flags.HasFlag(TagFieldFlags.GlobalMaterial))
-                            continue;
-                    }
-
-                    var oldValue = tagFieldInfo.GetValue(data);
-                    if (oldValue is null)
+                    if(!tagFieldInfo.Attribute.Flags.HasFlag(TagFieldFlags.GlobalMaterial))
                         continue;
-
-                    // convert the field
-                    var newValue = ConvertData(cacheStream, blamCacheStream, resourceStreams, oldValue, definition, blamTagName);
-
-                    if (tagFieldInfo.Attribute.Flags.HasFlag(TagFieldFlags.GlobalMaterial))
-                        newValue = ConvertGlobalMaterialTypeField(cacheStream, blamCacheStream, tagFieldInfo, newValue);
-
-                    tagFieldInfo.SetValue(data, newValue);
                 }
+                   
+                var oldValue = tagFieldInfo.GetValue(data);
+                if (oldValue is null)
+                    continue;
+
+                // convert the field
+                var newValue = ConvertData(cacheStream, blamCacheStream, resourceStreams, oldValue, definition, blamTagName);
+
+                if(tagFieldInfo.Attribute.Flags.HasFlag(TagFieldFlags.GlobalMaterial))
+                    newValue = ConvertGlobalMaterialTypeField(cacheStream, blamCacheStream, tagFieldInfo, newValue);
+
+                tagFieldInfo.SetValue(data, newValue);
             }
 
             return UpgradeStructure(cacheStream, resourceStreams, data, definition, blamTagName);
@@ -2040,18 +2009,17 @@ namespace TagTool.Commands.Porting
             {
                 case CacheVersion.Halo2Vista:
                 case CacheVersion.Halo2Xbox:
-                    // Commenting out as it causes compile errors - Faber
-                    //if (flags.Halo2.ToString().Contains("Unknown"))
-                    //{
-                    //    new TagToolWarning($"Disabling unknown phantom type flags ({flags.Halo2.ToString()})");
-                    //    Console.WriteLine($"         in tag \"{tagName}.physics_model\"");
-                    //
-                    //    foreach (var flag in Enum.GetValues(typeof(PhysicsModel.PhantomTypeFlags.Halo2Bits)))
-                    //        if (flag.ToString().StartsWith("Unknown") && flags.Halo2.HasFlag((PhysicsModel.PhantomTypeFlags.Halo2Bits)flag))
-                    //            flags.Halo2 &= ~(PhysicsModel.PhantomTypeFlags.Halo2Bits)flag;
-                    //}
-                    //if (!Enum.TryParse(flags.Halo2.ToString(), out flags.Halo3ODST))
-                    //    throw new FormatException(BlamCache.Version.ToString());
+                    if (flags.Halo2.ToString().Contains("Unknown"))
+                    {
+                        new TagToolWarning($"Disabling unknown phantom type flags ({flags.Halo2.ToString()})");
+                        Console.WriteLine($"         in tag \"{tagName}.physics_model\"");
+
+                        foreach (var flag in Enum.GetValues(typeof(PhysicsModel.PhantomTypeFlags.Halo2Bits)))
+                            if (flag.ToString().StartsWith("Unknown") && flags.Halo2.HasFlag((PhysicsModel.PhantomTypeFlags.Halo2Bits)flag))
+                                flags.Halo2 &= ~(PhysicsModel.PhantomTypeFlags.Halo2Bits)flag;
+                    }
+                    if (!Enum.TryParse(flags.Halo2.ToString(), out flags.Halo3ODST))
+                        throw new FormatException(BlamCache.Version.ToString());
                     break;
 
                 case CacheVersion.Halo3Retail:

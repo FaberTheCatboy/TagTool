@@ -40,8 +40,6 @@ namespace TagTool.Cache
 
             return Resolver.IndexToStringID(index);
         }
-
-        public abstract object GetString(object name);
     }
 
 }

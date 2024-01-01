@@ -18,6 +18,9 @@ using TagTool.Commands.Forge;
 using TagTool.Cache.HaloOnline;
 using TagTool.Commands.Scenarios;
 using TagTool.Cache.Monolithic;
+using TagTool.MtnDewIt.Commands;
+using TagTool.MtnDewIt.Commands.ConvertCache;
+using TagTool.MtnDewIt.Commands.GenerateCache;
 
 namespace TagTool.Commands.Tags
 {
@@ -65,6 +68,7 @@ namespace TagTool.Commands.Tags
             context.AddCommand(new FindValueCommand(cache, null));
             context.AddCommand(new TagDependencyCommand(cache));
             context.AddCommand(new GuessTagDefCommand(cache));
+            context.AddCommand(new GenerateTagObjectCommand(cache));
 
             // Halo Online Specific Commands
             if (cache is GameCacheHaloOnlineBase)
@@ -86,7 +90,7 @@ namespace TagTool.Commands.Tags
                 context.AddCommand(new GenerateShaderCommand(hoCache));
                 context.AddCommand(new RecompileShadersCommand(hoCache));
                 context.AddCommand(new GenerateRenderMethodCommand(hoCache));
-                //context.AddCommand(new GenerateRmdfCommand(hoCache));
+                context.AddCommand(new GenerateRmdfCommand(hoCache));
                 context.AddCommand(new GenerateBitmapCommand(hoCache));
                 context.AddCommand(new SwitchObjectTypeCommand(hoCache));
 
@@ -118,6 +122,11 @@ namespace TagTool.Commands.Tags
             if(cache is GameCacheHaloOnline)
             {
                 var hoCache = cache as GameCacheHaloOnline;
+                context.AddCommand(new GenerateCacheCommand(cache, hoCache, contextStack));
+                context.AddCommand(new ConvertCacheCommand(cache, hoCache, contextStack));
+                context.AddCommand(new DebugTestCommand(cache, hoCache, contextStack));
+                context.AddCommand(new UpdateEDTagsCommand(hoCache));
+                context.AddCommand(new UpdateHOTagsCommand(hoCache));
                 context.AddCommand(new RebuildCacheFileCommand(hoCache));
                 context.AddCommand(new CreateModPackageCommand(contextStack, hoCache));
                 context.AddCommand(new UpdateModPackageCommand(contextStack, hoCache));

@@ -114,18 +114,6 @@ namespace TagTool.BlamFile
                 return false;
         }
 
-        private static bool IsGen4MCCFormat(EndianReader reader)
-        {
-            reader.SeekTo(0x120);
-            CacheVersion version = CacheVersion.Unknown;
-            CachePlatform platform = CachePlatform.All;
-            CacheVersionDetection.GetFromBuildName(reader.ReadString(0x20), ref version, ref platform);
-            if (platform == CachePlatform.MCC)
-                return true;
-            else
-                return false;
-        }
-
         private static bool IsModifiedReachFormat(EndianReader reader)
         {
             reader.SeekTo(0x120);
@@ -197,9 +185,6 @@ namespace TagTool.BlamFile
                 var engineVersion = (CacheFileHeaderMCC.HaloEngineVersion)reader.ReadSByte();
                 switch(engineVersion)
                 {
-                    case CacheFileHeaderMCC.HaloEngineVersion.Halo2:
-                        cacheVersion = CacheVersion.Halo2Vista; 
-                        break;
                     case CacheFileHeaderMCC.HaloEngineVersion.Halo3:
                         cacheVersion = CacheVersion.Halo3Retail;
                         break;
@@ -208,12 +193,6 @@ namespace TagTool.BlamFile
                         break;
                     case CacheFileHeaderMCC.HaloEngineVersion.HaloReach:
                         cacheVersion = CacheVersion.HaloReach;
-                        break;
-                    case CacheFileHeaderMCC.HaloEngineVersion.Halo4:
-                        cacheVersion = CacheVersion.Halo4;
-                        break;
-                    case CacheFileHeaderMCC.HaloEngineVersion.Halo2AMP:
-                        cacheVersion = CacheVersion.Halo2AMP;
                         break;
                     default:
                         throw new NotSupportedException("Unsupported engine version");

@@ -19,12 +19,12 @@ namespace TagTool.Commands.ModelAnimationGraphs
                   "SetAnimation",
                   "Assign an animation as an action or overlay.",
 
-                  "SetAnimation <mode:class:type:label> <index/*/-1> [addaction/addoverlay]",
+                  "SetAnimation <mode:class:type:label> <index/last/-1> [addaction/addoverlay]",
 
                   "Assign an animation as an action or overlay."
                   + "\nAnimation name must contain 4 parts: a mode, weapon class, weapon type, and action/overlay name, separated by colons (:)."
                   + "\nIndex must be between 0 and the animation count, or -1 to disable the animation."
-                  + "\nUse \"*\" for the index of last animation.")
+                  + "\nUse \"last\" for the index of last animation.")
         {
             CacheContext = cachecontext;
             Animation = animation;
@@ -42,7 +42,6 @@ namespace TagTool.Commands.ModelAnimationGraphs
                 switch (args[1])
                 {
                     case "last":
-                    case "*":
                         animationIndex = (short)(Animation.Animations.Count - 1);
                         break;
                     default:
@@ -65,11 +64,9 @@ namespace TagTool.Commands.ModelAnimationGraphs
             {
                 switch (args[2].ToLower())
                 {
-                    case "action":
                     case "addaction":
                         addmodes = true;
                         break;
-                    case "overlay":
                     case "addoverlay":
                         addmodes = true;
                         overlay = true;

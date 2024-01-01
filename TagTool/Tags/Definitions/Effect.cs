@@ -8,7 +8,6 @@ using static TagTool.Tags.Definitions.Gen4.BreakableSurface.ParticleSystemDefini
 
 namespace TagTool.Tags.Definitions
 {
-    [TagStructure(Name = "effect", Tag = "effe", Size = 0x48, MaxVersion = CacheVersion.Halo3Alpha)]
     [TagStructure(Name = "effect", Tag = "effe", Size = 0x68, MaxVersion = CacheVersion.HaloOnline700123)]
     [TagStructure(Name = "effect", Tag = "effe", Size = 0x60, MinVersion = CacheVersion.HaloReach)]
     public class Effect : TagStructure
@@ -530,7 +529,7 @@ namespace TagTool.Tags.Definitions
                         [TagStructure(Size = 0x18)]
                         public class Movement : TagStructure
                         {
-                            public TypeValue Type;
+                            public TypeValue Tyoe;
                             public FlagsValue Flags;
 
                             [TagField(Flags = Padding, Length = 1)]

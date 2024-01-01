@@ -7,8 +7,7 @@ using static TagTool.Tags.TagFieldFlags;
 
 namespace TagTool.Tags.Definitions.Gen4
 {
-    [TagStructure(Name = "weapon", Tag = "weap", Size = 0x3C8, MaxVersion = CacheVersion.Halo4)]
-    [TagStructure(Name = "weapon", Tag = "weap", Size = 0x6A8, MaxVersion = CacheVersion.Halo2AMP)]
+    [TagStructure(Name = "weapon", Tag = "weap", Size = 0x3C8)]
     public class Weapon : Item
     {
         public WeaponDefinitionFlags WeaponFlags;

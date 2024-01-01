@@ -100,7 +100,6 @@ namespace TagTool.Cache
                     break;
                 case CacheVersion.HaloReach:
                 case CacheVersion.Halo4:
-                case CacheVersion.Halo2AMP:
                     NetworkKey = "SneakerNetReigns";
                     break;
             }
@@ -177,16 +176,6 @@ namespace TagTool.Cache
             {
                 sectionTable.SectionAddressToOffsets[i] += shiftAmount;
             }
-        }
-
-        public override bool TryGetTag(string text, out object tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool TryParseGroupTag(string value, out object tag)
-        {
-            throw new NotImplementedException();
         }
     }
 }

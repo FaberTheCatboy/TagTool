@@ -7,8 +7,7 @@ using static TagTool.Tags.TagFieldFlags;
 
 namespace TagTool.Tags.Definitions.Gen4
 {
-    [TagStructure(Name = "scenario_structure_bsp", Tag = "sbsp", Size = 0x5B0, MaxVersion = CacheVersion.Halo4)]
-    [TagStructure(Name = "scenario_structure_bsp", Tag = "sbsp", Size = 0x5F8, MaxVersion = CacheVersion.Halo2AMP)]
+    [TagStructure(Name = "scenario_structure_bsp", Tag = "sbsp", Size = 0x5B0)]
     public class ScenarioStructureBsp : TagStructure
     {
         public StructureManifestBuildIdentifierStruct BuildIdentifier;

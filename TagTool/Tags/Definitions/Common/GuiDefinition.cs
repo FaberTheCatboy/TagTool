@@ -24,7 +24,7 @@ namespace TagTool.Tags.Definitions.Common
             TopLeftCorner,
             TopRightCorner,
             BottomRightCorner,
-            BottomLeftCorner
+            BottomReftCorner
         }
     }
 

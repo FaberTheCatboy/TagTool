@@ -248,16 +248,6 @@ namespace TagTool.Cache
             ResourceCaches.AddRawResource(resource, rawResource);
             return resource;
         }
-
-        public override bool TryGetTag(string text, out object tag)
-        {
-            return BaseCacheReference.TryGetTag(text, out tag);
-        }
-
-        public override bool TryParseGroupTag(string value, out object tag)
-        {
-            return BaseCacheReference.TryParseGroupTag(value, out tag);
-        }
     }
 }
 

@@ -13,8 +13,6 @@ namespace TagTool.Tags
         public Tag ParentTag;
         public Tag GrandParentTag;
 
-        public StringId Name { get; set; }
-
         public TagGroup() : this(Tag.Null, Tag.Null, Tag.Null){}
 
         public TagGroup(Tag tag, Tag parentTag, Tag grandparentTag)

@@ -10,8 +10,6 @@ namespace TagTool.Tags
     /// </summary>
     public class TagStructureInfo
     {
-        private CacheVersion version;
-
         /// <summary>
         /// Constructs a <see cref="TagStructureInfo"/> object which contains info about a tag structure type.
         /// </summary>
@@ -19,11 +17,6 @@ namespace TagTool.Tags
         public TagStructureInfo(Type structureType)
             : this(structureType, CacheVersion.Unknown, CachePlatform.All)
         {
-        }
-
-        public TagStructureInfo(Type structureType, CacheVersion version) : this(structureType)
-        {
-            this.version = version;
         }
 
         /// <summary>

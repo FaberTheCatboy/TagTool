@@ -7,8 +7,7 @@ using static TagTool.Tags.TagFieldFlags;
 
 namespace TagTool.Tags.Definitions.Gen4
 {
-    [TagStructure(Name = "biped", Tag = "bipd", Size = 0x9F4, MaxVersion = CacheVersion.Halo2AMP)]
-    [TagStructure(Name = "biped", Tag = "bipd", Size = 0x3E0, MaxVersion = CacheVersion.Halo4)]
+    [TagStructure(Name = "biped", Tag = "bipd", Size = 0x3E0)]
     public class Biped : Unit
     {
         public Angle MovingTurningSpeed; // degrees per second

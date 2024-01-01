@@ -7,7 +7,6 @@ using TagTool.Havok;
 
 namespace TagTool.Tags.Definitions
 {
-    [TagStructure(Name = "vehicle", Tag = "vehi", Size = 0x3CC, MaxVersion = CacheVersion.Halo3Alpha)]
     [TagStructure(Name = "vehicle", Tag = "vehi", Size = 0x140, MaxVersion = CacheVersion.Halo3ODST)]
     [TagStructure(Name = "vehicle", Tag = "vehi", Size = 0x148, MinVersion = CacheVersion.HaloOnlineED, MaxVersion = CacheVersion.HaloOnline700123)]
     [TagStructure(Name = "vehicle", Tag = "vehi", Size = 0x17C, MinVersion = CacheVersion.HaloReach)]

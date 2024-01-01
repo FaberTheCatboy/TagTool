@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -148,15 +147,6 @@ namespace TagTool.Cache
             throw new NotImplementedException();
         }
 
-        public override bool TryGetTag(string text, out object tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool TryParseGroupTag(string value, out object tag)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

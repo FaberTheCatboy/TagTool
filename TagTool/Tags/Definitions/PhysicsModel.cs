@@ -7,8 +7,7 @@ using static TagTool.Tags.TagFieldFlags;
 
 namespace TagTool.Tags.Definitions
 {
-    [TagStructure(Name = "physics_model", Tag = "phmo", Size = 0x180, MaxVersion = CacheVersion.Halo3Alpha)]
-    [TagStructure(Name = "physics_model", Tag = "phmo", Size = 0x18C, MinVersion = CacheVersion.Halo3Beta, MaxVersion = CacheVersion.Halo3Beta)]
+	[TagStructure(Name = "physics_model", Tag = "phmo", Size = 0x18C, MinVersion = CacheVersion.Halo3Beta, MaxVersion = CacheVersion.Halo3Beta)]
 	[TagStructure(Name = "physics_model", Tag = "phmo", Size = 0x1A0, MinVersion = CacheVersion.Halo3Retail, MaxVersion = CacheVersion.Halo3ODST, Platform = CachePlatform.Original)]
     [TagStructure(Name = "physics_model", Tag = "phmo", Size = 0x198, MinVersion = CacheVersion.Halo3Retail, MaxVersion = CacheVersion.Halo3ODST, Platform = CachePlatform.MCC)]
     [TagStructure(Name = "physics_model", Tag = "phmo", Size = 0x198, MinVersion = CacheVersion.HaloOnlineED, MaxVersion = CacheVersion.HaloOnline700123)]
@@ -139,11 +138,8 @@ namespace TagTool.Tags.Definitions
         [TagStructure(Size = 0x4)]
         public class PhantomTypeFlags : TagStructure
         {
-            [TagField(MaxVersion = CacheVersion.Halo3Alpha)]
-            public Halo2Bits Halo3Alpha;
-
             [TagField(MaxVersion = CacheVersion.Halo3Beta)]
-            public Halo2Bits Halo3Beta;
+            public Halo2Bits Halo2;
 
             [TagField(MinVersion = CacheVersion.Halo3Retail, MaxVersion = CacheVersion.Halo3Retail)]
             public Halo3RetailBits Halo3Retail;

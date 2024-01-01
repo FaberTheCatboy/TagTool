@@ -33,10 +33,10 @@ namespace TagTool.Commands
 
             if (autoexecCommand == null)
             {
-                Console.WriteLine($"Universal Tag Editor - A TagTool fork created by FaberTheCatgirl. [{Assembly.GetExecutingAssembly().GetName().Version}]");
+                Console.WriteLine($"TagTool [{Assembly.GetExecutingAssembly().GetName().Version}]");
                 Console.WriteLine();
                 Console.WriteLine("Please report any bugs and/or feature requests:");
-                Console.WriteLine("https://github.com/FaberTheCatgirl/Universal-Tag-Editor/issues");
+                Console.WriteLine("https://github.com/TheGuardians-CI/TagTool/issues");
             }
 
             start:
@@ -73,7 +73,7 @@ namespace TagTool.Commands
 
             while (!fileInfo.Exists)
             {
-                Console.WriteLine("\nEnter the path to a Halo cache file (.map/.dat/blob_index.dat):");
+                Console.WriteLine("\nEnter the path to a Halo cache file (.map/.dat):");
                 Console.Write("> ");
 				var tagCacheFile = Console.ReadLine();
 
@@ -154,7 +154,7 @@ namespace TagTool.Commands
                 // Read and parse a command
                 Console.WriteLine();
                 Console.Write("{0}> ", contextStack.GetPath());
-                Console.Title = $"Universal Tag Editor {contextStack.GetPath()}>";
+                Console.Title = $"TagTool {contextStack.GetPath()}>";
 
                 var line = Console.ReadLine();
                 if (line == "restart")

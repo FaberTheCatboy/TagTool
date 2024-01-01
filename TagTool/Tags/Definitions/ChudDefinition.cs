@@ -17,7 +17,6 @@ namespace TagTool.Tags.Definitions
         [TagField(MinVersion = CacheVersion.HaloReach)]
         public List<ReachUpdateCacheBlock> WidgetUpdateCache;
 
-        [TagStructure(Size = 0x50, MaxVersion = CacheVersion.Halo3Alpha)]
         [TagStructure(Size = 0x38, MaxVersion = CacheVersion.HaloOnline700123)]
         [TagStructure(Size = 0x7C, MinVersion = CacheVersion.HaloReach, Platform = CachePlatform.Original)]
         [TagStructure(Size = 0x7C, MinVersion = CacheVersion.HaloReach, Platform = CachePlatform.MCC)]
@@ -57,9 +56,8 @@ namespace TagTool.Tags.Definitions
             public CachedTag RenderDataTemplate;
 
             public List<RenderDatum> RenderData;
+           
 
-
-            [TagStructure(Size = 0x1C, MaxVersion = CacheVersion.Halo3Alpha)]
             [TagStructure(Size = 0x28, MaxVersion = CacheVersion.Halo3Retail)]
             [TagStructure(Size = 0x38, MaxVersion = CacheVersion.Halo3ODST)]
             [TagStructure(Size = 0x44, MaxVersion = CacheVersion.HaloOnline604673)]
@@ -1741,7 +1739,7 @@ namespace TagTool.Tags.Definitions
                 [TagField(Version = CacheVersion.Halo3ODST)]
                 public WidgetBitmapFlagsODST FlagsODST;
 
-                [TagField(Version = CacheVersion.HaloOnlineED)]
+                [TagField(MinVersion = CacheVersion.HaloOnlineED, MaxVersion = CacheVersion.HaloOnline700123)]
                 public WidgetBitmapFlagsHO Flags;
 
                 [TagField(MinVersion = CacheVersion.HaloReach)]

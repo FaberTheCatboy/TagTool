@@ -8,6 +8,7 @@ using TagTool.Tags;
 using TagTool.Tags.Resources;
 using TagTool.BlamFile;
 using TagTool.Cache.Resources;
+using TagTool.Extensions;
 
 namespace TagTool.Cache.Gen3
 {
@@ -76,10 +77,7 @@ namespace TagTool.Cache.Gen3
 
         public override BinkResource GetBinkResource(TagResourceReference resourceReference)
         {
-            var tagResource = GetTagResourceFromReference(resourceReference);
-            if (!IsResourceValid(tagResource) || GetResourceTypeName(tagResource) != "bink")
-                return null;
-            return GetResourceDefinition<BinkResource>(resourceReference);
+            throw new NotImplementedException();
         }
 
         public override BitmapTextureInteropResource GetBitmapTextureInteropResource(TagResourceReference resourceReference)
@@ -193,17 +191,11 @@ namespace TagTool.Cache.Gen3
 
         public override Tags.Resources.Gen4.BitmapTextureInteropResource GetBitmapTextureInteropResourceGen4(TagResourceReference resourceReference)
         {
-            var tagResource = GetTagResourceFromReference(resourceReference);
-            if (!IsResourceValid(tagResource) || GetResourceTypeName(tagResource) != "bitmap_texture_interop_resource")
-                return null;
-            return GetResourceDefinition<Tags.Resources.Gen4.BitmapTextureInteropResource>(resourceReference);
+            throw new NotImplementedException();
         }
         public override Tags.Resources.Gen4.ModelAnimationTagResource GetModelAnimationTagResourceGen4(TagResourceReference resourceReference)
         {
-            var tagResource = GetTagResourceFromReference(resourceReference);
-            if (!IsResourceValid(tagResource) || GetResourceTypeName(tagResource) != "model_animation_tag_resource")
-                return null;
-            return GetResourceDefinition<Tags.Resources.Gen4.ModelAnimationTagResource>(resourceReference);
+            throw new NotImplementedException();
         }
         public override Tags.Resources.Gen4.CollisionModelResource GetCollisionModelResourceGen4(TagResourceReference resourceReference)
         {
@@ -211,30 +203,15 @@ namespace TagTool.Cache.Gen3
         }
         public override Tags.Resources.Gen4.RenderGeometryApiResourceDefinition GetRenderGeometryApiResourceDefinitionGen4(TagResourceReference resourceReference)
         {
-            var tagResource = GetTagResourceFromReference(resourceReference);
-            if (!IsResourceValid(tagResource) || GetResourceTypeName(tagResource) != "render_geometry_api_resource_definition")
-                return null;
-            return GetResourceDefinition<Tags.Resources.Gen4.RenderGeometryApiResourceDefinition>(resourceReference);
+            throw new NotImplementedException();
         }
         public override Tags.Resources.Gen4.StructureBspTagResources GetStructureBspTagResourcesGen4(TagResourceReference resourceReference)
         {
-            var tagResource = GetTagResourceFromReference(resourceReference);
-            if (!IsResourceValid(tagResource) || GetResourceTypeName(tagResource) != "structure_bsp_tag_resources")
-                return null;
-            // extra step for bsp resources
-            if (ResourceLayoutTable.Sections[tagResource.SegmentIndex].RequiredPageIndex == -1)
-                return null;
-            return GetResourceDefinition<Tags.Resources.Gen4.StructureBspTagResources>(resourceReference);
+            throw new NotImplementedException();
         }
         public override Tags.Resources.Gen4.StructureBspCacheFileTagResources GetStructureBspCacheFileTagResourcesGen4(TagResourceReference resourceReference)
         {
-            var tagResource = GetTagResourceFromReference(resourceReference);
-            if (!IsResourceValid(tagResource) || GetResourceTypeName(tagResource) != "structure_bsp_cache_file_tag_resources")
-                return null;
-            // extra step for bsp resources
-            if (ResourceLayoutTable.Sections[tagResource.SegmentIndex].RequiredPageIndex == -1)
-                return null;
-            return GetResourceDefinition<Tags.Resources.Gen4.StructureBspCacheFileTagResources>(resourceReference);
+            throw new NotImplementedException();
         }
         public override TagResourceReference CreateBinkResource(BinkResource binkResourceDefinition)
         {
@@ -474,15 +451,10 @@ namespace TagTool.Cache.Gen3
                     return compressed;
                 else
                     using (var readerDeflate = new DeflateStream(new MemoryStream(compressed), CompressionMode.Decompress))
-                        readerDeflate.Read(decompressed, 0, BitConverter.ToInt32(BitConverter.GetBytes(page.UncompressedBlockSize), 0));
+                        readerDeflate.ReadAll(decompressed, 0, BitConverter.ToInt32(BitConverter.GetBytes(page.UncompressedBlockSize), 0));
             }
 
             return decompressed;
-        }
-
-        public override object GetBitmapTextureInteropResource(object value)
-        {
-            throw new NotImplementedException();
         }
     }
 

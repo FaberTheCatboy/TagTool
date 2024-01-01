@@ -23,51 +23,45 @@ namespace TagTool.Commands.Porting
             var blamDecoratorResourceDefinition = BlamCache.ResourceCache.GetRenderGeometryApiResourceDefinition(sbsp.DecoratorGeometry.Resource);
             var blamGeometryResourceDefinition = BlamCache.ResourceCache.GetRenderGeometryApiResourceDefinition(sbsp.Geometry.Resource);
 
-            RenderGeometryApiResourceDefinition decoratorGeometry = null;
-            if(blamDecoratorResourceDefinition != null)
-                decoratorGeometry = converter.Convert(sbsp.DecoratorGeometry, blamDecoratorResourceDefinition);
-
+            var decoratorGeometry = converter.Convert(sbsp.DecoratorGeometry, blamDecoratorResourceDefinition);
             var geometry = converter.Convert(sbsp.Geometry, blamGeometryResourceDefinition);
 
             foreach (var cluster in sbsp.Clusters)
             {
-                if (blamDecoratorResourceDefinition != null)
+                List<ScenarioStructureBsp.Cluster.DecoratorGrid> newDecoratorGrids = new List<ScenarioStructureBsp.Cluster.DecoratorGrid>();
+
+                foreach (var grid in cluster.DecoratorGrids)
                 {
-                    List<ScenarioStructureBsp.Cluster.DecoratorGrid> newDecoratorGrids = new List<ScenarioStructureBsp.Cluster.DecoratorGrid>();
-
-                    foreach (var grid in cluster.DecoratorGrids)
-                    {
-                        VertexBufferDefinition buffer = null;
-                        if(CacheVersionDetection.IsInGen(CacheGeneration.HaloOnline, BlamCache.Version))
-                            buffer = blamDecoratorResourceDefinition.VertexBuffers[grid.HaloOnlineInfo.VertexBufferIndex].Definition;
-                        else
-                            buffer = blamDecoratorResourceDefinition.VertexBuffers[grid.Gen3Info.VertexBufferIndex].Definition;
+                    VertexBufferDefinition buffer = null;
+                    if(CacheVersionDetection.IsInGen(CacheGeneration.HaloOnline, BlamCache.Version))
+                        buffer = blamDecoratorResourceDefinition.VertexBuffers[grid.HaloOnlineInfo.VertexBufferIndex].Definition;
+                    else
+                        buffer = blamDecoratorResourceDefinition.VertexBuffers[grid.Gen3Info.VertexBufferIndex].Definition;
                         
-                        var offset = grid.VertexBufferOffset;
-                        grid.Vertices = new List<TinyPositionVertex>();
-                        using (var stream = new MemoryStream(buffer.Data.Data))
-                        {
-                            var vertexStream = VertexStreamFactory.Create(BlamCache.Version, BlamCache.Platform, stream);
-                            stream.Position = offset;
+                    var offset = grid.VertexBufferOffset;
+                    grid.Vertices = new List<TinyPositionVertex>();
+                    using (var stream = new MemoryStream(buffer.Data.Data))
+                    {
+                        var vertexStream = VertexStreamFactory.Create(BlamCache.Version, BlamCache.Platform, stream);
+                        stream.Position = offset;
 
-                            for (int i = 0; i < grid.Amount; i++)
-                                grid.Vertices.Add(vertexStream.ReadTinyPositionVertex());
-                        }
-
-                        if (grid.Amount == 0)
-                            newDecoratorGrids.Add(grid);
-                        else
-                        {
-                            // Get the new grids
-                            var newGrids = ConvertDecoratorGrid(grid.Vertices, grid);
-
-                            // Add all to list
-                            foreach (var newGrid in newGrids)
-                                newDecoratorGrids.Add(newGrid);
-                        }
+                        for (int i = 0; i < grid.Amount; i++)
+                            grid.Vertices.Add(vertexStream.ReadTinyPositionVertex());
                     }
-                    cluster.DecoratorGrids = newDecoratorGrids;
+
+                    if (grid.Amount == 0)
+                        newDecoratorGrids.Add(grid);
+                    else
+                    {
+                        // Get the new grids
+                        var newGrids = ConvertDecoratorGrid(grid.Vertices, grid);
+
+                        // Add all to list
+                        foreach (var newGrid in newGrids)
+                            newDecoratorGrids.Add(newGrid);
+                    }
                 }
+                cluster.DecoratorGrids = newDecoratorGrids;
                 
                 if(CacheContext.Version == CacheVersion.HaloOnlineED && BlamCache.Version < CacheVersion.HaloReach)
                 {
@@ -83,20 +77,17 @@ namespace TagTool.Commands.Porting
 
             // convert all the decorator vertex buffers
             // conversion already completed for halo online generation caches
-            if (blamDecoratorResourceDefinition != null)
+            if (!CacheVersionDetection.IsInGen(CacheGeneration.HaloOnline, BlamCache.Version))
             {
-                if (!CacheVersionDetection.IsInGen(CacheGeneration.HaloOnline, BlamCache.Version))
+                for (var bufferindex = 0; bufferindex < blamDecoratorResourceDefinition.VertexBuffers.Count; bufferindex++)
                 {
-                    for (var bufferindex = 0; bufferindex < blamDecoratorResourceDefinition.VertexBuffers.Count; bufferindex++)
-                    {
-                        var d3dBuffer = blamDecoratorResourceDefinition.VertexBuffers[bufferindex];
-                        VertexBufferConverter.ConvertVertexBuffer(BlamCache.Version, BlamCache.Platform, CacheContext.Version, CacheContext.Platform, d3dBuffer.Definition);
-                        decoratorGeometry.VertexBuffers.Add(d3dBuffer);
-                    }
+                    var d3dBuffer = blamDecoratorResourceDefinition.VertexBuffers[bufferindex];
+                    VertexBufferConverter.ConvertVertexBuffer(BlamCache.Version, BlamCache.Platform, CacheContext.Version, CacheContext.Platform, d3dBuffer.Definition);
+                    decoratorGeometry.VertexBuffers.Add(d3dBuffer);
                 }
-
-                sbsp.DecoratorGeometry.Resource = CacheContext.ResourceCache.CreateRenderGeometryApiResource(decoratorGeometry);
             }
+                
+            sbsp.DecoratorGeometry.Resource = CacheContext.ResourceCache.CreateRenderGeometryApiResource(decoratorGeometry);
             sbsp.Geometry.Resource = CacheContext.ResourceCache.CreateRenderGeometryApiResource(geometry);
 
             sbsp.CollisionBspResource = ConvertStructureBspTagResources(sbsp, out StructureBspTagResources sbspTagResources);
