@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using TagTool.IO;
 using System.Collections.Concurrent;
 using TagTool.Geometry.BspCollisionGeometry;
+using TagTool.Commands.ScenarioStructureBSPs;
 
 namespace TagTool.Commands.Porting
 {
@@ -243,6 +244,17 @@ namespace TagTool.Commands.Porting
             else if (RenderMethodTagGroups.Contains(blamTag.Group.Tag))
             {
                 RenderMethod renderMethod = BlamCache.Deserialize<RenderMethod>(blamCacheStream, blamTag);
+
+                if (BlamCache.Version >= CacheVersion.HaloReach)
+                {
+                    switch (blamTag.Group.Tag.ToString())
+                    {
+                        case "rmcs":
+                        case "rmgl":
+                            resultTag = GetDefaultShader(blamTag.Group.Tag, resultTag);
+                            return false;
+                    }
+                }
 
                 string templateName = renderMethod.ShaderProperties[0].Template.Name;
                 if(TagTool.Shaders.ShaderMatching.ShaderMatcherNew.Rmt2Descriptor.TryParse(templateName, out var rmt2Descriptor))
@@ -497,6 +509,9 @@ namespace TagTool.Commands.Porting
                                     item.ChildObject = null;
                                     break;
                             }
+
+                if (hlmt.NewDamageInfo == null || hlmt.NewDamageInfo.Count == 0)
+                    hlmt.NewDamageInfo = new List<Model.GlobalDamageInfoBlock>() { ConvertDamageInfoReach(hlmt.OmahaDamageInfo) };
             }
 
             if (definition is GameObject obj) {
@@ -835,6 +850,9 @@ namespace TagTool.Commands.Porting
 
                         if (CacheContext.StringTable.GetString(screenEffect.InputVariable) == "saved_film_vision_mode_intensity")
                             screenEffect.Flags_ODST |= AreaScreenEffect.ScreenEffectBlock.SefcFlagBits_ODST.DebugDisable; // prevents spawning and rendering
+
+                        if (screenEffect.ObjectFalloff.Data.Length == 0)
+                            screenEffect.ObjectFalloff = TagFunction.DefaultConstant;
                     }
                     
                     break;
@@ -1088,11 +1106,6 @@ namespace TagTool.Commands.Porting
                                 target.LockOnData.TrackingType = CacheContext.StringTable.GetStringId("bipeds");
                         }
                     }
-                    if(BlamCache.Version >= CacheVersion.HaloReach)
-                    {
-                        if(hlmt.NewDamageInfo == null || hlmt.NewDamageInfo.Count == 0)
-                            hlmt.NewDamageInfo = new List<Model.GlobalDamageInfoBlock>() { ConvertDamageInfoReach(hlmt.OmahaDamageInfo) };
-                    }
                     break;
               
 				case ModelAnimationGraph jmad:
@@ -1146,15 +1159,30 @@ namespace TagTool.Commands.Porting
 
                 case RenderModel mode:
                     blamDefinition = ConvertGen3RenderModel(edTag, blamTag, mode);
-					break;
+                    break;
 
-				case Scenario scnr:
-					blamDefinition = ConvertScenario(cacheStream, blamCacheStream, resourceStreams, scnr, blamTag.Name);
-					break;
+                case Scenario scnr:
+                    {
+                        blamDefinition = ConvertScenario(cacheStream, blamCacheStream, resourceStreams, scnr, blamTag.Name);
+                        if (BlamCache.Platform == CachePlatform.MCC)
+                        {
+                            foreach (var block in scnr.StructureBsps)
+                            {
+                                if (block.StructureBsp == null)
+                                    continue;
 
-				case ScenarioLightmap sLdT:
+                                CachedTag sbspTag = block.StructureBsp;
+                                var sbsp = CacheContext.Deserialize<ScenarioStructureBsp>(cacheStream, sbspTag);
+                                new GenerateStructureSurfacesCommand(CacheContext, sbspTag, sbsp, cacheStream, scnr).Execute(new List<string> { });
+                                CacheContext.Serialize(cacheStream, sbspTag, sbsp);
+                            }
+                        }
+                    }
+                    break;
+
+                case ScenarioLightmap sLdT:
                     if(BlamCache.Version < CacheVersion.HaloReach)
-					    blamDefinition = ConvertScenarioLightmap(cacheStream, blamCacheStream, resourceStreams, blamTag.Name, sLdT);
+                        blamDefinition = ConvertScenarioLightmap(cacheStream, blamCacheStream, resourceStreams, blamTag.Name, sLdT);
                     //fixup lightmap bsp references
                     if (BlamCache.Version >= CacheVersion.HaloReach)
                     {
@@ -1175,9 +1203,9 @@ namespace TagTool.Commands.Porting
                         blamDefinition = ConvertScenarioLightmapBspData(Lbsp);
 					break;
 
-				case ScenarioStructureBsp sbsp:
+                case ScenarioStructureBsp sbsp:
                     blamDefinition = ConvertScenarioStructureBsp(sbsp, edTag, resourceStreams);
-					break;
+                    break;
 
                 case Sound sound:
                     //support sound conversion for HO generation caches
@@ -1602,6 +1630,11 @@ namespace TagTool.Commands.Porting
                         if (multiplayer.DefaultAbandonTime == 0) multiplayer.DefaultAbandonTime = 30;
                         multiplayer.BoundaryShape = multiplayer.ReachBoundaryShape;
                         multiplayer.SpawnTimerType = multiplayer.SpawnTimerTypeReach.ConvertLexical<MultiplayerObjectSpawnTimerType>();
+                        foreach (var boundary in multiplayer.BoundaryShaders)
+                        {
+                            boundary.StandardShader = (CachedTag)ConvertData(cacheStream, blamCacheStream, resourceStreams, boundary.StandardShader, definition, blamTagName);
+                            boundary.OpaqueShader = (CachedTag)ConvertData(cacheStream, blamCacheStream, resourceStreams, boundary.OpaqueShader, definition, blamTagName);
+                        }
                         return multiplayer;
                     }
 
@@ -1680,8 +1713,8 @@ namespace TagTool.Commands.Porting
                             case "none":
                                 break;
                             default:
-                                if (!string.IsNullOrEmpty(scnrObj.MegaloLabel))
-                                    new TagToolWarning($"unknown megalo label: {scnrObj.MegaloLabel}");
+                                //if (!string.IsNullOrEmpty(scnrObj.MegaloLabel))
+                                //    new TagToolWarning($"unknown megalo label: {scnrObj.MegaloLabel}");
                                 break;
                         }
 
@@ -1731,6 +1764,10 @@ namespace TagTool.Commands.Porting
 
                 case CollisionGeometry collisionGeometry:
                     return ConvertCollisionBsp(collisionGeometry);
+
+                case CollisionBspPhysicsDefinition collisionBspPhysics when BlamCache.Version >= CacheVersion.HaloReach:
+                    collisionBspPhysics = ConvertStructure(cacheStream, blamCacheStream, resourceStreams, collisionBspPhysics, definition, blamTagName);
+                    return ConvertCollisionBspPhysicsReach(collisionBspPhysics);
 
 				case RenderGeometry renderGeometry when BlamCache.Version >= CacheVersion.Halo3Retail:
 					renderGeometry = ConvertStructure(cacheStream, blamCacheStream, resourceStreams, renderGeometry, definition, blamTagName);
@@ -1915,7 +1952,7 @@ namespace TagTool.Commands.Porting
                 if (matchIndex != -1)
                 {
                     if(name != originalName)
-                        new TagToolWarning($"Failed to find global material type '{originalName}', using '{name}' instead");
+                        Console.WriteLine($"Failed to find global material type '{originalName}', using '{name}'");
 
                     return matchIndex;
                 }
@@ -1925,7 +1962,7 @@ namespace TagTool.Commands.Porting
                 if (blamIndex == -1)
                 {
                     if (!originalName.StartsWith("default"))
-                        new TagToolWarning($"Failed to find global material type '{originalName}', using 'default_material'");
+                        Console.WriteLine($"Failed to find global material type '{originalName}', using 'default_material'");
                     return 0;
                 }
 
@@ -1942,7 +1979,7 @@ namespace TagTool.Commands.Porting
                     matchIndex = 0;
 
                 name = CacheContext.StringTable.GetString(materials[matchIndex].Name);
-                new TagToolWarning($"Failed to find global material type '{originalName}', using '{name}' instead");
+                Console.WriteLine($"Failed to find global material type '{originalName}', using '{name}'");
                 return matchIndex;
             }
         }

@@ -127,6 +127,21 @@ namespace TagTool.Commands.Porting
 
                 ConvertInstanceBucketsReach(sbsp, sbspTagResources);
                 ConvertReachEnvironmentMopp(sbsp);
+
+                // Reach invalid shader is an inconspicuous gray material and was left on many maps
+                if (CacheContext.TagCache.TryGetCachedTag("levels\\shared\\shaders\\simple\\grey.shader", out CachedTag defaultGray))
+                {
+                    foreach (var material in sbsp.CollisionMaterials)
+                    {
+                        if (material.RenderMethod?.ToString() == "shaders\\invalid.shader")
+                            material.RenderMethod = defaultGray;
+                    }
+                    foreach (var material in sbsp.Materials)
+                    {
+                        if (material.RenderMethod?.ToString() == "shaders\\invalid.shader")
+                            material.RenderMethod = defaultGray;
+                    }
+                }
             }
 
             return sbsp;
@@ -171,7 +186,7 @@ namespace TagTool.Commands.Porting
             }
         }
 
-        public InstancedGeometryPhysics ConvertCollisionBspPhysicsReach(InstancedGeometryPhysicsReach bspPhysicsReach)
+        public InstancedGeometryPhysics ConvertInstancedGeometryPhysicsReach(InstancedGeometryPhysicsReach bspPhysicsReach)
         {
             var bspPhysics = new InstancedGeometryPhysics();
             bspPhysics.MoppBvTreeShape = new Havok.CMoppBvTreeShape()
@@ -191,6 +206,17 @@ namespace TagTool.Commands.Porting
                 bspPhysics.PoopShape = new TagTool.Tags.TagBlock<DecomposedPoopShape>() { poop };
             }
 
+            return bspPhysics;
+        }
+
+        public CollisionBspPhysicsDefinition ConvertCollisionBspPhysicsReach(CollisionBspPhysicsDefinition bspPhysics)
+        {
+            bspPhysics.MoppBvTreeShape = new Havok.CMoppBvTreeShape()
+            {
+                ReferencedObject = new Havok.HkpReferencedObject(),
+                Type = 27,
+                Scale = bspPhysics.MoppBvTreeShapeReach.MoppScale,
+            };
             return bspPhysics;
         }
 

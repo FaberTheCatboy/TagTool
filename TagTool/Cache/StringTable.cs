@@ -41,7 +41,14 @@ namespace TagTool.Cache
             return Resolver.IndexToStringID(index);
         }
 
-        public abstract object GetString(object name);
+        public virtual StringId GetOrAddString(string newString)
+        {
+            StringId stringId = GetStringId(newString);
+            if (stringId != StringId.Invalid)
+                return stringId;
+            return AddString(newString);
+        }
+
     }
 
 }

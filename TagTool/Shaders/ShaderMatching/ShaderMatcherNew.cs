@@ -333,7 +333,19 @@ namespace TagTool.Shaders.ShaderMatching
                 rmdf = BaseCache.Deserialize<RenderMethodDefinition>(BaseCacheStream, rmdfTag);
             }
 
-            var rmt2 = ShaderGenerator.ShaderGeneratorNew.GenerateTemplateSafe(BaseCache, BaseCacheStream, rmdf, tagName, out PixelShader pixl, out VertexShader vtsh);
+            RenderMethodTemplate rmt2;
+            PixelShader pixl;
+            VertexShader vtsh;
+
+            try
+            {
+                rmt2 = ShaderGenerator.ShaderGeneratorNew.GenerateTemplateSafe(BaseCache, BaseCacheStream, rmdf, tagName, out pixl, out vtsh);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Generation failed, finding best substitute");
+                return false;
+            }
 
             generatedRmt2 = BaseCache.TagCache.AllocateTag<RenderMethodTemplate>(tagName);
 
@@ -441,6 +453,9 @@ namespace TagTool.Shaders.ShaderMatching
                             // Reach rmsh //
                             case @"albedo\patchy_emblem":
                                 optionName = "emblem_change_color";
+                                break;
+                            case @"albedo\color_mask":
+                                optionName = "constant_color";
                                 break;
                             case @"bump_mapping\detail_blend":
                             case @"bump_mapping\three_detail_blend":
