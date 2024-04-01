@@ -172,15 +172,6 @@ namespace TagTool.Cache
                     version = CacheVersion.HaloOnline700123;
                     cachePlatform = CachePlatform.Original;
                     break;
-                case "08516.10.02.19.1607.omaha_alpha":
-                    version = CacheVersion.HaloReachAlpha;
-                    cachePlatform = CachePlatform.Original;
-                    break;
-                case "09449.10.03.25.1545.omaha_beta": // This is the Halo Reach Pre-Beta Build. This was used to internally Test the game before the Beta was released.
-                case "09730.10.04.09.1309.omaha_delta": // This is the Halo Reach Beta Build. This was used to publically Test the game before the it was released.
-                    version = CacheVersion.HaloReachBeta; // This is the Added Version Detection for the Halo Reach Beta Build, I have had to manually map out Tag Offsets for this build as they are not present in the Halo Reach Retail Build. This is due to the fact that the Halo Reach Beta Build is a heavily modified version of the Halo 3 Engine and requires some special handling.
-                    cachePlatform = CachePlatform.Original;
-                    break;
                 case "00095.11.04.09.1509.demo": // This is the Halo Reach Demo, which ran on a seprate build of the Halo Reach Engine. This is the Added Version Detection for the Halo Reach Demo Build, I have had to manually map out Tag Offsets for this build as they are not present in the Halo Reach Retail Build. This is due to the fact that the Halo Reach Demo Build is a modified version of the Halo Reach Retail Build and requires some special handling.
                 case "11860.10.07.24.0147.omaha_relea":
                     version = CacheVersion.HaloReach;
@@ -324,7 +315,7 @@ namespace TagTool.Cache
                     case CacheVersion.Halo3Retail:
                         return "Jan  3 2024 10:08:58";
                     case CacheVersion.Halo3ODST:
-                        retuen "Sep  1 2023 10:55:15";
+                        return "Sep  1 2023 10:55:15";
                     default:
                         return version.ToString();
                 }

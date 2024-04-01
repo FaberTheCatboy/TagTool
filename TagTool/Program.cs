@@ -33,10 +33,8 @@ namespace TagTool.Commands
 
             if (autoexecCommand == null)
             {
-                Console.WriteLine($"TagTool [{Assembly.GetExecutingAssembly().GetName().Version}]");
+                Console.WriteLine($"TagTool Asahi [{Assembly.GetExecutingAssembly().GetName().Version}]");
                 Console.WriteLine();
-                Console.WriteLine("Please report any bugs and/or feature requests:");
-                Console.WriteLine("https://github.com/TheGuardians-CI/TagTool/issues");
             }
 
             start:
