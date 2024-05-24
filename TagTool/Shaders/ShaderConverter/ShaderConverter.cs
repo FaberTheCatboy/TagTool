@@ -284,7 +284,7 @@ namespace TagTool.Shaders.ShaderConverter
                 }
                 else // use default value
                 {
-                    new TagToolWarning($"Shader converter: attempting default values for texture {name}");
+                    Debug.WriteLine($"Shader converter: attempting default values for texture {name}");
 
                     int parameterIndex = Parameters.FindIndex(x => x.Type == ParameterBlock.OptionDataType.Bitmap &&
                         Cache.StringTable.GetString(x.Name) == name);
@@ -376,7 +376,7 @@ namespace TagTool.Shaders.ShaderConverter
                 }
                 else // use default value
                 {
-                    new TagToolWarning($"Shader converter: attempting default values for vector {name}");
+                    Debug.WriteLine($"Shader converter: attempting default values for vector {name}");
 
                     int parameterIndex = Parameters.FindIndex(x => Cache.StringTable.GetString(x.Name) == name);
 
@@ -459,7 +459,7 @@ namespace TagTool.Shaders.ShaderConverter
                 }
                 else // use default value
                 {
-                    new TagToolWarning($"Shader converter: attempting default values for integer {name}");
+                    Debug.WriteLine($"Shader converter: attempting default values for integer {name}");
 
                     int parameterIndex = Parameters.FindIndex(x => Cache.StringTable.GetString(x.Name) == name);
 
@@ -477,9 +477,9 @@ namespace TagTool.Shaders.ShaderConverter
         {
             uint boolConstants = 0;
 
-            for (int i = 0; i < Rmt2.IntegerParameterNames.Count; i++)
+            for (int i = 0; i < Rmt2.BooleanParameterNames.Count; i++)
             {
-                string name = Cache.StringTable.GetString(Rmt2.IntegerParameterNames[i].Name);
+                string name = Cache.StringTable.GetString(Rmt2.BooleanParameterNames[i].Name);
                 int parameterMappingIndex = ParameterMappings.FindIndex(x => x.Name == name);
 
                 if (parameterMappingIndex != -1)
@@ -499,7 +499,7 @@ namespace TagTool.Shaders.ShaderConverter
                 }
                 else // use default value
                 {
-                    new TagToolWarning($"Shader converter: attempting default values for bool {name}");
+                    Debug.WriteLine($"Shader converter: attempting default values for bool {name}");
 
                     int parameterIndex = Parameters.FindIndex(x => Cache.StringTable.GetString(x.Name) == name);
 

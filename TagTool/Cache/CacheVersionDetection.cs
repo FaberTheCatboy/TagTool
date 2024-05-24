@@ -70,6 +70,10 @@ namespace TagTool.Cache
                     version = CacheVersion.HaloCustomEdition;
                     cachePlatform = CachePlatform.Original;
                     break;
+                case "02.01.07.4998":
+                    version = CacheVersion.Halo2Alpha;
+                    cachePlatform = CachePlatform.Original;
+                    break;
                 case "02.06.28.07902":
                     version = CacheVersion.Halo2Beta;
                     cachePlatform = CachePlatform.Original;
@@ -602,6 +606,7 @@ namespace TagTool.Cache
                 case CacheVersion.HaloCustomEdition:
                     return CacheGeneration.First;
 
+                case CacheVersion.Halo2Alpha:
                 case CacheVersion.Halo2Vista:
                 case CacheVersion.Halo2Xbox:
                 case CacheVersion.Halo2Beta:
@@ -662,6 +667,7 @@ namespace TagTool.Cache
                 case CacheVersion.HaloPC:
                 case CacheVersion.HaloCustomEdition:
                     return GameTitle.HaloCE;
+                case CacheVersion.Halo2Alpha:
                 case CacheVersion.Halo2Beta:
                 case CacheVersion.Halo2Xbox:
                 case CacheVersion.Halo2Vista:
@@ -767,6 +773,7 @@ namespace TagTool.Cache
         HaloXbox,
         HaloPC,
         HaloCustomEdition,
+        Halo2Alpha,
         Halo2Beta,
         Halo2Xbox,
         Halo2Vista,

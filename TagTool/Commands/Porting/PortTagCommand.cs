@@ -103,7 +103,7 @@ namespace TagTool.Commands.Porting
             try
             {
                 using (var cacheStream = FlagIsSet(PortingFlags.Memory) ? new MemoryStream() : (Stream)CacheContext.OpenCacheReadWrite())
-                using (var blamCacheStream = BlamCache.OpenCacheRead())
+                using (var blamCacheStream = BlamCache is GameCacheModPackage ? ((GameCacheModPackage)BlamCache).OpenCacheRead(cacheStream) : BlamCache.OpenCacheRead())
                 {
                     if (FlagIsSet(PortingFlags.Memory))
                         using (var cacheFileStream = CacheContext.OpenCacheRead())
@@ -1186,7 +1186,7 @@ namespace TagTool.Commands.Porting
                 case Scenario scnr:
                     {
                         blamDefinition = ConvertScenario(cacheStream, blamCacheStream, resourceStreams, scnr, blamTag.Name);
-                        if (BlamCache.Platform == CachePlatform.MCC)
+                        if (PortingOptions.Current.RegenerateStructureSurfaces)
                         {
                             foreach (var block in scnr.StructureBsps)
                             {
@@ -1466,24 +1466,22 @@ namespace TagTool.Commands.Porting
                     {
                         Enum.TryParse(particleSystem.ReachFlags.ToString(), out particleSystem.Flags);
 
-                        foreach (var emitter in particleSystem.Emitters)
+                        for (int i = 0; i < particleSystem.Emitters.Count; i++)
                         {
+                            var emitter = particleSystem.Emitters[i];
                             // Needs to be implemented in the engine
-                            if (emitter.EmissionShape >= Effect.Event.ParticleSystem.Emitter.EmissionShapeValue.BoatHullSurface)
+                            if (emitter.EmissionShape == Effect.Event.ParticleSystem.Emitter.EmissionShapeValue.BoatHullSurface ||
+                                emitter.EmissionShape == Effect.Event.ParticleSystem.Emitter.EmissionShapeValue.Jetwash)
                             {
-                                switch (emitter.EmissionShape)
-                                {
-                                    case Effect.Event.ParticleSystem.Emitter.EmissionShapeValue.Cylinder:
-                                        emitter.EmissionShape = Effect.Event.ParticleSystem.Emitter.EmissionShapeValue.Tube;
-                                        break;
-                                    case Effect.Event.ParticleSystem.Emitter.EmissionShapeValue.Plane:
-                                        emitter.EmissionShape = Effect.Event.ParticleSystem.Emitter.EmissionShapeValue.Globe;
-                                        break;
-                                    default:
-                                        new TagToolWarning($"Unsupported particle emitter shape '{emitter.EmissionShape}'. Using default.");
-                                        emitter.EmissionShape = Effect.Event.ParticleSystem.Emitter.EmissionShapeValue.Sprayer;
-                                        break;
-                                }
+                                new TagToolWarning($"Unsupported particle emitter shape '{emitter.EmissionShape}'. Using default.");
+                                emitter.EmissionShape = Effect.Event.ParticleSystem.Emitter.EmissionShapeValue.Sprayer;
+                            }
+
+                            if (emitter.AxisScale.X != 1.0f || emitter.AxisScale.Y != 1.0f || emitter.AxisScale.Z != 1.0f)
+                            {
+                                Effects.EmitterCustomPointPlotter pecpPlotter = new Effects.EmitterCustomPointPlotter(CacheContext, cacheStream, emitter, blamTagName, i);
+                                if (!pecpPlotter.ConvertEmitterToCustomPoints())
+                                    new TagToolWarning($"Particle emitter \"{CacheContext.StringTable.GetString(emitter.Name)}_{i}\" will have incorrect dimensions: AxisScale {emitter.AxisScale}");
                             }
 
                             if (!Enum.TryParse(emitter.ParticleMovement.FlagsReach.ToString(), out emitter.ParticleMovement.Flags))
